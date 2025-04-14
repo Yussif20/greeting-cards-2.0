@@ -1,0 +1,118 @@
+/* src/index.css */
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Custom variables for light mode */
+:root {
+  --background: #e5e7eb; /* gray-200 */
+  --foreground: #1f2937; /* gray-800 */
+  --card-bg: #ffffff; /* white */
+  --border: #d1d5db; /* gray-300 */
+}
+
+/* Dark mode variables */
+.dark {
+  --background: #1f2937; /* gray-800 */
+  --foreground: #e5e7eb; /* gray-200 */
+  --card-bg: #374151; /* gray-700 */
+  --border: #4b5563; /* gray-600 */
+}
+
+/* Apply variables */
+body {
+  @apply bg-[var(--background)] text-[var(--foreground)];
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: white;
+  border-radius: 2px;
+}
+html.dark ::-webkit-scrollbar-track {
+  background: #171515;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #155dfc;
+  border-radius: 5px;
+  transition: 0.3 ease all;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #457efb;
+}
+
+.bg-background {
+  background-color: var(--background);
+}
+
+.text-foreground {
+  color: var(--foreground);
+}
+
+.bg-card {
+  background-color: var(--card-bg);
+}
+
+.border {
+  border-color: var(--border);
+}
+
+/* Animations (unchanged) */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 1s ease-out;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.8s ease-out;
+}
+
+.animate-slide-up.delay-100 {
+  animation-delay: 0.1s;
+}
+
+.animate-slide-up.delay-200 {
+  animation-delay: 0.2s;
+}
+
+.animate-slide-up.delay-300 {
+  animation-delay: 0.3s;
+}
+
+.animate-pulse {
+  animation: pulse 8s infinite ease-in-out;
+}
