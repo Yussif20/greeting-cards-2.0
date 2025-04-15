@@ -8,10 +8,11 @@ const CardSelector = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedCardType, setSelectedCardType] = useState(null);
   const [name, setName] = useState('');
-  const [color, setColor] = useState('#fff');
+  const [color, setColor] = useState('#ffffff');
   const [namePosition, setNamePosition] = useState({ x: 540, y: 540 });
   const [font, setFont] = useState('Cairo');
   const [fontStyle, setFontStyle] = useState('normal');
+  const [fontLanguage, setFontLanguage] = useState('arabic');
   const [activeTab, setActiveTab] = useState('RHC');
   const [fontSize, setFontSize] = useState(60);
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -71,13 +72,14 @@ const CardSelector = () => {
         setNamePosition({ x: img.width / 2, y: img.height * 0.8 - 100 });
         setFontSize(80);
       } else {
-        setNamePosition({ x: img.width / 2, y: img.height / 2 + 300 });
+        setNamePosition({ x: img.width / 2, y: img.height / 2 + 1200 });
         setFontSize(180);
       }
       if (!enableCustomization) {
-        setColor('#fff');
-        setFont(i18n.language === 'ar' ? 'Cairo' : 'Arial');
+        setColor('#ffffff');
+        setFont(fontLanguage === 'arabic' ? 'Cairo' : 'Arial');
         setFontStyle('normal');
+        setFontLanguage(i18n.language === 'ar' ? 'arabic' : 'english');
       }
     };
   };
@@ -151,8 +153,8 @@ const CardSelector = () => {
   const downloadCard = () => {
     if (!selectedImage) return;
 
-    // const canvas = canvasRef.current;
-    // const ctx = canvas.getContext('2d');
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
     const scale = window.devicePixelRatio || 1;
 
     // Create a temporary canvas for full resolution
@@ -187,8 +189,8 @@ const CardSelector = () => {
   const shareCard = async () => {
     if (!selectedImage) return;
 
-    // const canvas = canvasRef.current;
-    // const ctx = canvas.getContext('2d');
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
     const scale = window.devicePixelRatio || 1;
 
     // Create a temporary canvas for full resolution
@@ -252,6 +254,7 @@ const CardSelector = () => {
     font,
     fontStyle,
     fontSize,
+    fontLanguage,
     i18n.language,
     fontsLoaded,
     enableCustomization,
@@ -380,18 +383,37 @@ const CardSelector = () => {
                 </div>
                 <div className="flex flex-col gap-1">
                   <span className="text-sm text-[var(--foreground)] font-medium">
+                    {t('font_language')}
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <label className="text-sm text-[var(--foreground)]">
+                      {t('arabic')}
+                    </label>
+                    <input
+                      type="checkbox"
+                      checked={fontLanguage === 'arabic'}
+                      onChange={() =>
+                        setFontLanguage(
+                          fontLanguage === 'arabic' ? 'english' : 'arabic'
+                        )
+                      }
+                      className="h-4 w-4 accent-[#ee2e3a]"
+                    />
+                    <label className="text-sm text-[var(--foreground)]">
+                      {t('english')}
+                    </label>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="text-sm text-[var(--foreground)] font-medium">
                     {t('guide_font')}
                   </span>
-                  <div className="flex gap-4">
+                  {fontLanguage === 'arabic' ? (
                     <select
-                      value={i18n.language === 'ar' ? font : ''}
+                      value={font}
                       onChange={(e) => setFont(e.target.value)}
-                      disabled={i18n.language !== 'ar'}
-                      className="p-1 w-full sm:w-32 bg-[var(--card-bg)] border border-[var(--border)] rounded-md shadow-[0_1px_3px_rgba(0,0,0,0.1)] focus:outline-none focus:ring-2 focus:ring-[#243e87] disabled:opacity-50"
+                      className="p-1 w-full sm:w-32 bg-[var(--card-bg)] border border-[var(--border)] rounded-md shadow-[0_1px_3px_rgba(0,0,0,0.1)] focus:outline-none focus:ring-2 focus:ring-[#243e87]"
                     >
-                      <option value="" disabled>
-                        {t('arabic_fonts')}
-                      </option>
                       <option value="Cairo">Cairo</option>
                       <option value="Tajawal">Tajawal</option>
                       <option value="Amiri">Amiri</option>
@@ -403,15 +425,12 @@ const CardSelector = () => {
                       <option value="Almarai">Almarai</option>
                       <option value="Reem Kufi">Reem Kufi</option>
                     </select>
+                  ) : (
                     <select
-                      value={i18n.language !== 'ar' ? font : ''}
+                      value={font}
                       onChange={(e) => setFont(e.target.value)}
-                      disabled={i18n.language === 'ar'}
-                      className="p-1 w-full sm:w-32 bg-[var(--card-bg)] border border-[var(--border)] rounded-md shadow-[0_1px_3px_rgba(0,0,0,0.1)] focus:outline-none focus:ring-2 focus:ring-[#243e87] disabled:opacity-50"
+                      className="p-1 w-full sm:w-32 bg-[var(--card-bg)] border border-[var(--border)] rounded-md shadow-[0_1px_3px_rgba(0,0,0,0.1)] focus:outline-none focus:ring-2 focus:ring-[#243e87]"
                     >
-                      <option value="" disabled>
-                        {t('english_fonts')}
-                      </option>
                       <option value="Arial">Arial</option>
                       <option value="Roboto">Roboto</option>
                       <option value="Lora">Lora</option>
@@ -419,7 +438,7 @@ const CardSelector = () => {
                       <option value="Open Sans">Open Sans</option>
                       <option value="Montserrat">Montserrat</option>
                     </select>
-                  </div>
+                  )}
                 </div>
                 <div className="flex flex-col gap-1">
                   <span className="text-sm text-[var(--foreground)] font-medium">
@@ -466,11 +485,13 @@ const CardSelector = () => {
           </div>
         </div>
         <div className="w-full lg:w-1/2 p-4 flex flex-col items-center justify-center gap-4">
-          <span className="text-sm text-[var(--foreground)]/70">
-            {i18n.language === 'ar'
-              ? `(لتحديد مكان وضع الاسم على الصورة اضغط أو المس الصورة واختر المكان المناسب)`
-              : '(Click or touch the image to set name position)'}
-          </span>
+          {enableCustomization && (
+            <span className="text-sm text-[var(--foreground)]/70">
+              {i18n.language === 'ar'
+                ? `(لتحديد مكان وضع الاسم على الصورة اضغط أو المس الصورة واختر المكان المناسب)`
+                : '(Click or touch the image to set name position)'}
+            </span>
+          )}
           <canvas
             ref={canvasRef}
             className="w-full h-auto border border-[var(--border)] rounded-lg shadow-[0_4px_8px_rgba(0,0,0,0.15)] cursor-crosshair"
