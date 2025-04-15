@@ -60,51 +60,6 @@ const CardSelector = () => {
 
     loadFonts();
   }, []);
-  const handleTabChange = (tab) => {
-    setActiveTab(tab);
-  };
-
-  const getUnderlinePosition = () => {
-    const index = Object.keys(imageCategories).indexOf(activeTab);
-    const tab = tabRefs.current[index];
-    if (tab) {
-      const tabWidth = tab.offsetWidth;
-      const tabLeft = tab.offsetLeft;
-      const isRTL = i18n.dir() === 'rtl';
-      const container = tab.parentElement;
-      const containerWidth = container.offsetWidth;
-
-      if (isRTL) {
-        const rightEdge = containerWidth - (tabLeft + tabWidth);
-        const underlineRight = rightEdge + (tabWidth - 60) / 2;
-        return { right: `${underlineRight}px`, left: 'auto' };
-      } else {
-        const underlineLeft = tabLeft + (tabWidth - 60) / 2;
-        return { left: `${underlineLeft}px`, right: 'auto' };
-      }
-    }
-    return { left: '0px', right: 'auto' };
-  };
-
-  useEffect(() => {
-    const updatePosition = () => {
-      setUnderlineStyle(getUnderlinePosition());
-    };
-
-    updatePosition();
-
-    const resizeObserver = new ResizeObserver(() => {
-      updatePosition();
-    });
-
-    tabRefs.current.forEach((tab) => {
-      if (tab) resizeObserver.observe(tab);
-    });
-
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, [activeTab, i18n.language]);
 
   const selectCard = (card) => {
     const img = new Image();
@@ -112,69 +67,80 @@ const CardSelector = () => {
     img.onload = () => {
       setSelectedImage(img);
       setSelectedCardType(card.type);
-      // Set defaults based on card type
       if (card.type === 'whatsapp') {
-        setNamePosition({ x: img.width / 2, y: img.height * 0.8 }); // Bottom-center
+        setNamePosition({ x: img.width / 2, y: img.height * 0.8 - 100 });
         setFontSize(80);
       } else {
-        setNamePosition({ x: img.width / 2, y: img.height / 2 }); // Center
-        setFontSize(60);
+        setNamePosition({ x: img.width / 2, y: img.height / 2 + 300 });
+        setFontSize(180);
       }
-      // Reset customization if disabled
       if (!enableCustomization) {
         setColor('#fff');
-        setFont('Cairo');
+        setFont(i18n.language === 'ar' ? 'Cairo' : 'Arial');
         setFontStyle('normal');
       }
     };
   };
 
+  const handleTabChange = (category) => {
+    setActiveTab(category);
+    getUnderlinePosition(category);
+  };
+
+  const getUnderlinePosition = () => {
+    const activeTabRef =
+      tabRefs.current[Object.keys(imageCategories).indexOf(activeTab)];
+    if (activeTabRef) {
+      const { offsetLeft, offsetWidth } = activeTabRef;
+      setUnderlineStyle({
+        left: `${offsetLeft + offsetWidth / 2 - 30}px`,
+      });
+    }
+  };
+
   const drawPreview = () => {
-    if (!selectedImage || !canvasRef.current || !fontsLoaded) return;
     const canvas = canvasRef.current;
+    if (!canvas || !selectedImage) return;
+
     const ctx = canvas.getContext('2d');
+    const scale = window.devicePixelRatio || 1;
+    const container = canvas.parentElement;
+    const maxWidth = container.clientWidth;
+    const aspectRatio = selectedImage.width / selectedImage.height;
+    const canvasWidth = Math.min(maxWidth, selectedImage.width);
+    const canvasHeight = canvasWidth / aspectRatio;
 
-    const originalWidth = selectedImage.width;
-    const originalHeight = selectedImage.height;
+    canvas.width = canvasWidth * scale;
+    canvas.height = canvasHeight * scale;
+    canvas.style.width = `${canvasWidth}px`;
+    canvas.style.height = `${canvasHeight}px`;
+    ctx.scale(scale, scale);
 
-    canvas.width = originalWidth;
-    canvas.height = originalHeight;
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    ctx.drawImage(selectedImage, 0, 0, canvasWidth, canvasHeight);
 
-    const containerWidth = canvas.parentElement.clientWidth;
-    const previewWidth = Math.min(originalWidth, containerWidth * 0.9);
-    const previewScale = previewWidth / originalWidth;
-    canvas.style.width = `${previewWidth}px`;
-    canvas.style.height = `${originalHeight * previewScale}px`;
-
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = 'high';
-    ctx.drawImage(selectedImage, 0, 0, canvas.width, canvas.height);
-
-    const baseFontSize = Math.min(originalWidth, originalHeight) * 0.25;
-    const adjustedFontSize = fontSize || baseFontSize;
-
-    const fontString = `${fontStyle === 'bold' ? 'bold ' : ''}${
-      fontStyle === 'italic' ? 'italic ' : ''
-    }${adjustedFontSize}px "${font}"`;
-    ctx.font = fontString;
-    console.log('Applied font:', fontString);
-    ctx.fillStyle = color;
-    ctx.textAlign = 'center';
-    ctx.fillText(name || t('enter_name'), namePosition.x, namePosition.y);
+    if (name) {
+      const scaleX = canvasWidth / selectedImage.width;
+      const scaleY = canvasHeight / selectedImage.height;
+      ctx.font = `${fontStyle} ${fontSize * scaleX}px ${font}`;
+      ctx.fillStyle = color;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(name, namePosition.x * scaleX, namePosition.y * scaleY);
+    }
   };
 
   const debouncedDrawPreview = debounce(drawPreview, 100);
 
   const handleCanvasClick = (e) => {
-    if (!selectedImage || !canvasRef.current) return;
+    if (!enableCustomization || !selectedImage) return;
+
     const canvas = canvasRef.current;
     const rect = canvas.getBoundingClientRect();
-
-    const previewWidth = parseFloat(canvas.style.width);
-    const previewHeight = parseFloat(canvas.style.height);
-    const scaleX = selectedImage.width / previewWidth;
-    const scaleY = selectedImage.height / previewHeight;
-
+    const canvasWidth = rect.width;
+    const canvasHeight = rect.height;
+    const scaleX = selectedImage.width / canvasWidth;
+    const scaleY = selectedImage.height / canvasHeight;
     const x = (e.clientX - rect.left) * scaleX;
     const y = (e.clientY - rect.top) * scaleY;
 
@@ -183,72 +149,87 @@ const CardSelector = () => {
   };
 
   const downloadCard = () => {
-    if (!selectedImage) {
-      alert(t('select_card_alert'));
-      return;
+    if (!selectedImage) return;
+
+    // const canvas = canvasRef.current;
+    // const ctx = canvas.getContext('2d');
+    const scale = window.devicePixelRatio || 1;
+
+    // Create a temporary canvas for full resolution
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = selectedImage.width * scale;
+    tempCanvas.height = selectedImage.height * scale;
+    const tempCtx = tempCanvas.getContext('2d');
+    tempCtx.scale(scale, scale);
+
+    tempCtx.drawImage(
+      selectedImage,
+      0,
+      0,
+      selectedImage.width,
+      selectedImage.height
+    );
+
+    if (name) {
+      tempCtx.font = `${fontStyle} ${fontSize}px ${font}`;
+      tempCtx.fillStyle = color;
+      tempCtx.textAlign = 'center';
+      tempCtx.textBaseline = 'middle';
+      tempCtx.fillText(name, namePosition.x, namePosition.y);
     }
 
-    try {
-      drawPreview();
-      const canvas = canvasRef.current;
-      const dataUrl = canvas.toDataURL('image/png', 0.7);
-
-      if (!dataUrl || dataUrl === 'data:,') {
-        throw new Error('Canvas failed to generate image data');
-      }
-
-      const link = document.createElement('a');
-      link.download = 'card.png';
-      link.href = dataUrl;
-      link.click();
-    } catch (error) {
-      console.error('Error generating image:', error);
-      alert(t('download_error') || 'Failed to save image. Try again.');
-    }
+    const link = document.createElement('a');
+    link.download = 'greeting-card.png';
+    link.href = tempCanvas.toDataURL('image/png');
+    link.click();
   };
 
   const shareCard = async () => {
-    if (!selectedImage) {
-      alert(t('select_card_alert'));
-      return;
+    if (!selectedImage) return;
+
+    // const canvas = canvasRef.current;
+    // const ctx = canvas.getContext('2d');
+    const scale = window.devicePixelRatio || 1;
+
+    // Create a temporary canvas for full resolution
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = selectedImage.width * scale;
+    tempCanvas.height = selectedImage.height * scale;
+    const tempCtx = tempCanvas.getContext('2d');
+    tempCtx.scale(scale, scale);
+
+    tempCtx.drawImage(
+      selectedImage,
+      0,
+      0,
+      selectedImage.width,
+      selectedImage.height
+    );
+
+    if (name) {
+      tempCtx.font = `${fontStyle} ${fontSize}px ${font}`;
+      tempCtx.fillStyle = color;
+      tempCtx.textAlign = 'center';
+      tempCtx.textBaseline = 'middle';
+      tempCtx.fillText(name, namePosition.x, namePosition.y);
     }
 
-    try {
-      drawPreview();
-      const canvas = canvasRef.current;
-      const dataUrl = canvas.toDataURL('image/png', 0.7);
+    const dataUrl = tempCanvas.toDataURL('image/png');
+    const blob = await (await fetch(dataUrl)).blob();
+    const file = new File([blob], 'greeting-card.png', { type: 'image/png' });
 
-      if (!dataUrl || dataUrl === 'data:,') {
-        throw new Error('Canvas failed to generate image data');
-      }
-
-      const response = await fetch(dataUrl);
-      const blob = await response.blob();
-      const file = new File([blob], 'card.png', { type: 'image/png' });
-
-      if (
-        navigator.share &&
-        navigator.canShare &&
-        navigator.canShare({ files: [file] })
-      ) {
+    if (navigator.share) {
+      try {
         await navigator.share({
           files: [file],
-          title: t('share_title'),
-          text: t('share_text'),
+          title: t('greeting_card'),
+          text: t('share_message'),
         });
-      } else {
-        const link = document.createElement('a');
-        link.download = file.name;
-        link.href = dataUrl;
-        link.click();
-        alert(t('share_fallback'));
+      } catch (err) {
+        console.error('Share failed:', err);
       }
-    } catch (error) {
-      console.error('Error sharing image:', error);
-      alert(
-        t('share_error') ||
-          'Failed to share image. Please download and share manually.'
-      );
+    } else {
+      alert(t('share_not_supported'));
     }
   };
 
@@ -401,12 +382,16 @@ const CardSelector = () => {
                   <span className="text-sm text-[var(--foreground)] font-medium">
                     {t('guide_font')}
                   </span>
-                  {i18n.language === 'ar' ? (
+                  <div className="flex gap-4">
                     <select
-                      value={font}
+                      value={i18n.language === 'ar' ? font : ''}
                       onChange={(e) => setFont(e.target.value)}
-                      className="p-1 w-full sm:w-32 bg-[var(--card-bg)] border border-[var(--border)] rounded-md shadow-[0_1px_3px_rgba(0,0,0,0.1)] focus:outline-none focus:ring-2 focus:ring-[#243e87]"
+                      disabled={i18n.language !== 'ar'}
+                      className="p-1 w-full sm:w-32 bg-[var(--card-bg)] border border-[var(--border)] rounded-md shadow-[0_1px_3px_rgba(0,0,0,0.1)] focus:outline-none focus:ring-2 focus:ring-[#243e87] disabled:opacity-50"
                     >
+                      <option value="" disabled>
+                        {t('arabic_fonts')}
+                      </option>
                       <option value="Cairo">Cairo</option>
                       <option value="Tajawal">Tajawal</option>
                       <option value="Amiri">Amiri</option>
@@ -418,12 +403,15 @@ const CardSelector = () => {
                       <option value="Almarai">Almarai</option>
                       <option value="Reem Kufi">Reem Kufi</option>
                     </select>
-                  ) : (
                     <select
-                      value={font}
+                      value={i18n.language !== 'ar' ? font : ''}
                       onChange={(e) => setFont(e.target.value)}
-                      className="p-1 w-full sm:w-32 bg-[var(--card-bg)] border border-[var(--border)] rounded-md shadow-[0_1px_3px_rgba(0,0,0,0.1)] focus:outline-none focus:ring-2 focus:ring-[#243e87]"
+                      disabled={i18n.language === 'ar'}
+                      className="p-1 w-full sm:w-32 bg-[var(--card-bg)] border border-[var(--border)] rounded-md shadow-[0_1px_3px_rgba(0,0,0,0.1)] focus:outline-none focus:ring-2 focus:ring-[#243e87] disabled:opacity-50"
                     >
+                      <option value="" disabled>
+                        {t('english_fonts')}
+                      </option>
                       <option value="Arial">Arial</option>
                       <option value="Roboto">Roboto</option>
                       <option value="Lora">Lora</option>
@@ -431,7 +419,7 @@ const CardSelector = () => {
                       <option value="Open Sans">Open Sans</option>
                       <option value="Montserrat">Montserrat</option>
                     </select>
-                  )}
+                  </div>
                 </div>
                 <div className="flex flex-col gap-1">
                   <span className="text-sm text-[var(--foreground)] font-medium">
@@ -467,6 +455,7 @@ const CardSelector = () => {
                     <option value="100">100px</option>
                     <option value="120">120px</option>
                     <option value="150">150px</option>
+                    <option value="180">180px</option>
                     <option value="200">200px</option>
                     <option value="250">250px</option>
                     <option value="300">300px</option>
