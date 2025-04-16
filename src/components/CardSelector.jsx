@@ -411,7 +411,7 @@ const CardSelector = () => {
     >
       <main className="flex-1 container mx-auto px-4 py-6 lg:px-8 lg:py-8 flex flex-col">
         {/* Category Tabs */}
-        <div className="w-full max-w-5xl mx-auto mb-8">
+        <div className=" max-w-5xl mx-auto mb-8">
           <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">
             <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-500 text-white mr-2">
               1
@@ -538,17 +538,6 @@ const CardSelector = () => {
                     placeholder={t('enter_name')}
                     className="px-4 py-3 w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-gray-800 dark:text-white"
                   />
-                </div>
-
-                <div className="flex items-center justify-end">
-                  <button
-                    className="text-sm text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400"
-                    onClick={() =>
-                      i18n.changeLanguage(i18n.language === 'en' ? 'ar' : 'en')
-                    }
-                  >
-                    {i18n.language === 'ar' ? 'English' : 'العربية'}
-                  </button>
                 </div>
 
                 {enableCustomization && (

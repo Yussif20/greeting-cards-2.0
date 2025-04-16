@@ -1,70 +1,77 @@
-// src/i18n.js
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
 const resources = {
   en: {
     translation: {
+      // Common
       visit_website: 'Visit Our Website',
-      select_card: 'Select a Card by Clicking',
-      enter_name: 'Enter your name here',
-      choose_color: 'Choose Name Color:',
-      save_high_quality: 'Save in High Quality (300 DPI)',
-      save_card: 'Save Card',
-      select_card_alert: 'Please select a card first!',
-      copyright: '© 2025 All rights reserved.', // Added English footer text
-      high_res_error: 'Failed to save high-resolution image. Try normal resolution or a smaller image.',
-      "guide_name": "Enter your name here",
-      "guide_color": "Pick a text color",
-      "guide_font": "Choose a font style",
-      "guide_font_style": "Select text style",
-      "guide_font_size": "Set text size",
-      "guide_high_res": "Save in high quality",
-      "normal": "Normal",
-      "bold": "Bold",
-      "italic": "Italic",
-      "share_card": "Share",
-      "share_title": "My Custom Card",
-      "share_text": "Check out this card I created!",
-      "share_fallback": "Sharing not supported. Image downloaded—please share it manually.",
-      "share_error": "Failed to share image. Please download and share manually.",
+      copyright: '© 2025 All rights reserved.',
+      // Home
       eid_greeting: 'Blessed Eid al-Adha',
       eid_message: 'Wishing you a joyful and peaceful Eid with your family and loved ones',
       company_message: 'At Reda Hazard Control, we celebrate this Eid with you by creating personalized greeting cards to share the joy',
       create_card: 'Create Your Card Now',
+
+      // CardSelector
+      select_card: 'Select a Card',
+      whatsapp_story: 'WhatsApp Story',
+      linkedin_post: 'LinkedIn Post',
+      guide_name: 'Enter Your Name',
       enable_customization: 'Enable Customization',
+      guide_color: 'Pick a Text Color',
+      font_language: 'Font Language',
+      arabic: 'Arabic',
+      english: 'English',
+      guide_font: 'Choose a Font',
+      guide_font_style: 'Select Text Style',
+      guide_font_size: 'Set Text Size',
+      normal: 'Normal',
+      bold: 'Bold',
+      italic: 'Italic',
+      preview: 'Preview',
+      position_tip: 'Click or drag to position text',
+      save_card: 'Save Card',
+      share_card: 'Share Card',
+      greeting_card: 'Greeting Card',
+      share_message: 'Check out my custom greeting card!',
+      loading_fonts: 'Loading fonts...',
     },
   },
   ar: {
     translation: {
+      // Common
       visit_website: 'زوروا موقعنا الإلكتروني',
-      select_card: 'اختر احدى الصور بالضغط عليها',
-      enter_name: 'اكتب اسمك هنا',
-      choose_color: 'اختر لون الاسم:',
-      save_high_quality: 'حفظ بجودة عالية (300 DPI)',
-      save_card: 'حفظ البطاقة',
-      select_card_alert: 'اختار بطاقة أولًا!',
-      copyright: '© 2025 جميع الحقوق محفوظة', // Added Arabic footer text
-      high_res_error: 'فشل حفظ الصورة عالية الدقة. جرب الدقة العادية أو صورة أصغر.',
-      "guide_name": "أدخل اسمك هنا",
-      "guide_color": "اختر لون النص",
-      "guide_font": "اختر نمط الخط",
-      "guide_font_style": "حدد أسلوب النص",
-      "guide_font_size": "حدد حجم النص",
-      "guide_high_res": "حفظ بجودة عالية",
-      "normal": "عادي",
-      "bold": "غامق",
-      "italic": "مائل",
-      "share_card": "مشاركة",
-      "share_title": "بطاقتي المخصصة",
-      "share_text": "شاهد هذه البطاقة التي أنشأتها!",
-      "share_fallback": "المشاركة غير مدعومة. تم تنزيل الصورة—يرجى مشاركتها يدويًا.",
-      "share_error": "فشل في مشاركة الصورة. يرجى تنزيلها ومشاركتها يدويًا.",
+      copyright: '© 2025 جميع الحقوق محفوظة',
+      // Home
       eid_greeting: 'عيد أضحى مبارك',
       eid_message: 'نتمنى لكم عيداً مليئاً بالفرح والسلام مع عائلتكم وأحبائكم',
       company_message: 'في رضا للسيطرة على المخاطر، نحتفل معكم بهذا العيد بإنشاء بطاقات تهنئة مخصصة لمشاركة الفرحة',
       create_card: 'أنشئ بطاقتك الآن',
+
+      // CardSelector
+      select_card: 'اختر بطاقة',
+      whatsapp_story: 'قصة واتساب',
+      linkedin_post: 'منشور لينكدإن',
+      guide_name: 'أدخل اسمك',
       enable_customization: 'تفعيل التخصيص',
+      guide_color: 'اختر لون النص',
+      font_language: 'لغة الخط',
+      arabic: 'العربية',
+      english: 'الإنجليزية',
+      guide_font: 'اختر خطًا',
+      guide_font_style: 'حدد أسلوب النص',
+      guide_font_size: 'حدد حجم النص',
+      normal: 'عادي',
+      bold: 'غامق',
+      italic: 'مائل',
+      preview: 'معاينة',
+      position_tip: 'انقر أو اسحب لتحديد موقع النص',
+      save_card: 'حفظ البطاقة',
+      share_card: 'مشاركة البطاقة',
+      greeting_card: 'بطاقة تهنئة',
+      share_message: 'شاهد بطاقة التهنئة المخصصة الخاصة بي!',
+      loading_fonts: 'جارٍ تحميل الخطوط...',
     },
   },
 };
@@ -73,7 +80,7 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    lng: 'en', // Default language remains English
+    lng: 'en',
     fallbackLng: 'en',
     interpolation: {
       escapeValue: false,
