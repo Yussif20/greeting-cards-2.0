@@ -11,12 +11,18 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.14",
+    "canvas": "^3.1.0",
+    "framer-motion": "^12.7.3",
+    "html2canvas": "^1.4.1",
     "i18next": "^24.2.3",
     "lodash": "^4.17.21",
+    "lucide-react": "^0.488.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-i18next": "^15.4.1",
-    "react-router-dom": "^7.5.0"
+    "react-router-dom": "^7.5.0",
+    "typescript": "^5.8.3",
+    "ui": "^0.2.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
