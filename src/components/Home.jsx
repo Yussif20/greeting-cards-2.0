@@ -10,7 +10,7 @@ const Home = () => {
       dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}
     >
       <div className="container mx-auto px-4 py-6 lg:px-8 lg:py-8 max-w-5xl text-center">
-        <div className=" dark:bg-gray-800 rounded-xl p-6 mb-8 animate-fade-in">
+        <div className="dark:bg-gray-800 rounded-xl p-6 mb-8 animate-fade-in">
           <svg
             preserveAspectRatio="xMidYMid meet"
             data-bbox="159.96 404.44 275.35 43.99"
@@ -20,7 +20,7 @@ const Home = () => {
             role="presentation"
             aria-hidden="true"
             aria-label="Company Logo"
-            className="h-16 sm:h-20 w-auto mx-auto"
+            className="h-10 sm:h-16 w-auto max-w-[200px] sm:max-w-[250px] mx-auto"
           >
             <g>
               <path

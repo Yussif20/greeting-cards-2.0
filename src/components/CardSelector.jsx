@@ -411,34 +411,40 @@ const CardSelector = () => {
     >
       <main className="flex-1 container mx-auto px-4 py-6 lg:px-8 lg:py-8 flex flex-col">
         {/* Category Tabs */}
-        <div className=" max-w-5xl mx-auto mb-8">
+        <div className="max-w-5xl mx-auto mb-8">
+          {' '}
           <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">
+            {' '}
             <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-500 text-white mr-2">
-              1
-            </span>
-            {t('select_card')}
-          </h2>
-
+              {' '}
+              1{' '}
+            </span>{' '}
+            {t('select_card')}{' '}
+          </h2>{' '}
           <div className="relative bg-white dark:bg-gray-800 rounded-xl shadow-sm p-1 mb-4 overflow-hidden">
+            {' '}
             <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent pb-1">
-              <div className="flex items-center">
+              {' '}
+              <div className="flex items-center gap-2">
+                {' '}
                 {Object.keys(imageCategories).map((category, index) => (
                   <button
                     key={category}
                     ref={(el) => (tabRefs.current[index] = el)}
-                    className={`shrink-0 py-2 px-5 rounded-lg font-medium text-sm transition-all duration-200 ${
+                    className={`shrink-0 py-2 px-4 rounded-lg font-medium text-sm transition-all duration-200 ${
                       activeTab === category
                         ? 'bg-blue-500 text-white shadow-md'
                         : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
                     }`}
                     onClick={() => handleTabChange(category)}
                   >
-                    {category}
+                    {' '}
+                    {category}{' '}
                   </button>
-                ))}
-              </div>
-            </div>
-          </div>
+                ))}{' '}
+              </div>{' '}
+            </div>{' '}
+          </div>{' '}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full max-w-5xl mx-auto">
