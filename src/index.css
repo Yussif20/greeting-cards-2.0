@@ -23,8 +23,7 @@
 body {
   @apply bg-[var(--background)] text-[var(--foreground)];
 }
-a,
-button {
+a {
   cursor: pointer;
 }
 

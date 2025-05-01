@@ -21,6 +21,7 @@ import {
   Undo2,
   RefreshCw,
   ZoomIn,
+  ZoomOut,
 } from 'lucide-react';
 
 const CardSelector = () => {
@@ -55,11 +56,11 @@ const CardSelector = () => {
   const presets = useMemo(
     () => ({
       elegant: {
-        color: '#2D3748',
-        font: 'Lora',
+        color: '#4B2E39',
+        font: 'Merriweather',
         fontStyle: 'normal',
         fontSize: 85,
-        textShadow: 3,
+        textShadow: 3.5,
       },
       professional: {
         color: '#000000',
@@ -93,7 +94,7 @@ const CardSelector = () => {
       ],
       english: [
         'Roboto',
-        'Lora',
+        'Merriweather',
         'Playfair Display',
         'Open Sans',
         'Montserrat',
@@ -107,7 +108,6 @@ const CardSelector = () => {
     const loadFonts = async () => {
       setIsLoading(true);
       try {
-        // Check cached fonts
         const cachedFonts = localStorage.getItem('loadedFonts');
         if (cachedFonts) {
           setFontsLoaded(true);
@@ -115,13 +115,11 @@ const CardSelector = () => {
           return;
         }
 
-        // Preconnect to Google Fonts
         const preconnect = document.createElement('link');
         preconnect.rel = 'preconnect';
         preconnect.href = 'https://fonts.googleapis.com';
         document.head.appendChild(preconnect);
 
-        // Load default fonts (Cairo, Roboto)
         const defaultFonts = ['Cairo', 'Roboto'];
         defaultFonts.forEach((fontName) => {
           const link = document.createElement('link');
@@ -133,20 +131,18 @@ const CardSelector = () => {
           document.head.appendChild(link);
         });
 
-        // Wait for fonts with timeout
         const timeoutPromise = new Promise((_, reject) =>
           setTimeout(() => reject(new Error('Font load timeout')), 5000)
         );
         await Promise.race([document.fonts.ready, timeoutPromise]);
 
-        // Cache successful load
         localStorage.setItem('loadedFonts', 'true');
         setFontsLoaded(true);
         setIsLoading(false);
       } catch (err) {
         console.error('Font loading error:', err);
         setError(t('font_load_error_retry'));
-        setFontsLoaded(true); // Use fallback font
+        setFontsLoaded(true);
         setIsLoading(false);
       }
     };
@@ -170,7 +166,7 @@ const CardSelector = () => {
       } catch (err) {
         console.error(`Failed to load font ${fontName}:`, err);
         setError(t('font_load_error_retry'));
-        setFont(fontLanguage === 'arabic' ? 'Cairo' : 'Roboto'); // Fallback font
+        setFont(fontLanguage === 'arabic' ? 'Cairo' : 'Roboto');
       }
     },
     [t, fontLanguage]
@@ -271,11 +267,8 @@ const CardSelector = () => {
         setSelectedImage(img);
         setSelectedCardType(card.type);
         setNamePosition({
-          x: card.type === 'whatsapp' ? img.width / 2 : img.width / 2,
-          y:
-            card.type === 'whatsapp'
-              ? img.height * 0.8 - 100
-              : img.height / 2 + 400,
+          x: img.width / 2,
+          y: card.type === 'whatsapp' ? img.height * 0.8 : img.height / 2,
         });
         setFontSize(card.type === 'whatsapp' ? 80 : 180);
         if (!enableCustomization) {
@@ -372,6 +365,7 @@ const CardSelector = () => {
       const x = (e.clientX - rect.left) * scaleX;
       const y = (e.clientY - rect.top) * scaleY;
       setNamePosition({ x, y });
+      console.log('New name position:', { x, y }); // Debug log
       debouncedUpdatePreview();
     },
     [
@@ -588,8 +582,8 @@ const CardSelector = () => {
       x: selectedImage ? selectedImage.width / 2 : 540,
       y: selectedImage
         ? selectedCardType === 'whatsapp'
-          ? selectedImage.height * 0.8 - 100
-          : selectedImage.height / 2 + 400
+          ? selectedImage.height * 0.8
+          : selectedImage.height / 2
         : 540,
     });
     loadFontOnDemand(fontLanguage === 'arabic' ? 'Cairo' : 'Roboto');
@@ -647,54 +641,48 @@ const CardSelector = () => {
             {error.includes('font_load_error_retry') && (
               <button
                 onClick={retryFontLoading}
-                className="ml-4 px-3 py-1 bg-red-200 dark:bg-red-800 text-red-800 dark:text-red-100 rounded hover:bg-red-300 dark:hover:bg-red-700"
+                className="ml-4 px-3 py-1 bg-red-200 dark:bg-red-800 text-red-800 dark:text-red-100 rounded hover:bg-red-300 dark:hover:bg-red-700 cursor-pointer"
               >
                 {t('retry')}
               </button>
             )}
             <button
               onClick={() => setError(null)}
-              className="ml-auto text-red-700 dark:text-red-200 hover:text-red-900 dark:hover:text-red-100"
+              className="ml-auto text-red-700 dark:text-red-200 hover:text-red-900 dark:hover:text-red-100 cursor-pointer"
             >
               ✕
             </button>
           </div>
         )}
 
-        {/* Category Tabs */}
-        <div className="max-w-6xl mx-auto mb-10">
-          <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-6 flex items-center">
-            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white mr-3">
-              1
-            </span>
-            {t('select_card')}
-          </h2>
-          <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-2 overflow-hidden">
-            <div className="flex overflow-x-auto scrollbar-hidden snap-x snap-mandatory">
-              {Object.keys(imageCategories).map((category, index) => (
-                <button
-                  key={category}
-                  ref={(el) => (tabRefs.current[index] = el)}
-                  className={
-                    activeTab === category
-                      ? 'snap-center shrink-0 py-3 px-6 rounded-xl font-medium text-sm transition-all duration-300 bg-blue-600 text-white shadow-inner'
-                      : 'snap-center shrink-0 py-3 px-6 rounded-xl font-medium text-sm transition-all duration-300 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                  }
-                  onClick={() => handleTabChange(category)}
-                  aria-current={activeTab === category ? 'page' : undefined}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 w-full max-w-6xl mx-auto">
-          {/* Card Selection */}
-          <div className="flex flex-col">
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 flex-1">
-              <div className="space-y-8">
+        {/* Card Selection Section */}
+        <section className="max-w-6xl mx-auto mb-12 flex justify-center">
+          <div className="w-full">
+            <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-8 flex items-center  pr-4 rounded-lg">
+              <span className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-600 text-white mr-4">
+                1
+              </span>
+              {t('select_card')}
+            </h2>
+            <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl shadow-xl p-8">
+              <div className="flex justify-center overflow-x-auto scrollbar-hidden snap-x snap-mandatory mb-8 gap-2">
+                {Object.keys(imageCategories).map((category, index) => (
+                  <button
+                    key={category}
+                    ref={(el) => (tabRefs.current[index] = el)}
+                    className={
+                      activeTab === category
+                        ? 'snap-center shrink-0 py-3 px-6 rounded-full font-semibold text-base transition-all duration-300 bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg'
+                        : 'snap-center shrink-0 py-3 px-6 rounded-full font-semibold text-base transition-all duration-300 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer'
+                    }
+                    onClick={() => handleTabChange(category)}
+                    aria-current={activeTab === category ? 'page' : undefined}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div>
+              <div className="space-y-10">
                 <CardSection
                   title={t('whatsapp_story')}
                   cards={whatsappCards}
@@ -711,9 +699,17 @@ const CardSelector = () => {
                 />
               </div>
             </div>
+          </div>
+        </section>
 
-            {/* Customization Panel */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 mt-6">
+        {/* Divider */}
+        <div className="max-w-6xl mx-auto border-b border-gray-300 dark:border-gray-600 bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent h-px mb-12" />
+
+        {/* Customization and Preview Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 w-full max-w-6xl mx-auto">
+          {/* Customization Panel */}
+          <div className="flex flex-col">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="flex items-center text-2xl font-semibold text-gray-800 dark:text-white">
                   <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white mr-3">
@@ -753,7 +749,7 @@ const CardSelector = () => {
                     setName(e.target.value);
                   }}
                   placeholder={t('enter_name')}
-                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all text-gray-800 dark:text-white"
+                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all text-gray-800 dark:text-white cursor-text"
                   aria-label={t('enter_name')}
                 />
                 {enableCustomization && (
@@ -775,7 +771,10 @@ const CardSelector = () => {
                             className="w-12 h-12 rounded-lg border-none cursor-pointer shadow-sm"
                             aria-label={t('guide_color')}
                           />
-                          <span className="ml-3 text-sm font-mono text-gray-600 dark:text-gray-400">
+                          <span
+                            className="ml-3 text-sm font-mono text-gray- etmeye
+                            600 dark:text-gray-400"
+                          >
                             {color}
                           </span>
                         </div>
@@ -903,7 +902,7 @@ const CardSelector = () => {
                         <button
                           key={preset}
                           onClick={() => applyPreset(preset)}
-                          className="px-4 py-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-all"
+                          className="px-4 py-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-all cursor-pointer"
                         >
                           {t(preset)}
                         </button>
@@ -916,7 +915,7 @@ const CardSelector = () => {
                         className={
                           history.length === 0
                             ? 'flex items-center px-4 py-2 rounded-lg transition-all bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
-                            : 'flex items-center px-4 py-2 rounded-lg transition-all bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-200 hover:bg-yellow-200 dark:hover:bg-yellow-800'
+                            : 'flex items-center px-4 py-2 rounded-lg transition-all bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-200 hover:bg-yellow-200 dark:hover:bg-yellow-800 cursor-pointer'
                         }
                         aria-label={t('undo')}
                       >
@@ -925,7 +924,7 @@ const CardSelector = () => {
                       </button>
                       <button
                         onClick={reset}
-                        className="flex items-center px-4 py-2 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 rounded-lg hover:bg-red-200 dark:hover:bg-red-800 transition-all"
+                        className="flex items-center px-4 py-2 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 rounded-lg hover:bg-red-200 dark:hover:bg-red-800 transition-all cursor-pointer"
                         aria-label={t('reset')}
                       >
                         <RefreshCw size={18} className="mr-2" />
@@ -999,7 +998,7 @@ const CardSelector = () => {
                         className={
                           enableCustomization
                             ? 'absolute cursor-move select-none'
-                            : 'absolute select-none'
+                            : 'absolute select-none cursor-default'
                         }
                         style={{
                           WebkitTextStroke:
@@ -1025,7 +1024,7 @@ const CardSelector = () => {
                     onClick={() =>
                       setZoomLevel((prev) => Math.min(prev + 0.1, 2))
                     }
-                    className="p-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-all"
+                    className="p-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-all cursor-pointer"
                     aria-label={t('zoom_in')}
                   >
                     <ZoomIn size={18} />
@@ -1034,10 +1033,10 @@ const CardSelector = () => {
                     onClick={() =>
                       setZoomLevel((prev) => Math.max(prev - 0.1, 0.5))
                     }
-                    className="p-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-all ml-2"
+                    className="p-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-all cursor-pointer ml-2"
                     aria-label={t('zoom_out')}
                   >
-                    <ZoomIn size={18} className="transform scale-y-[-1]" />
+                    <ZoomOut size={18} />
                   </button>
                 </div>
               )}
@@ -1049,7 +1048,7 @@ const CardSelector = () => {
                   className={
                     !selectedImage || actionLoading
                       ? 'flex items-center justify-center px-6 py-3 rounded-xl font-medium text-white transition-all duration-200 bg-gray-300 dark:bg-gray-600 cursor-not-allowed'
-                      : 'flex items-center justify-center px-6 py-3 rounded-xl font-medium text-white transition-all duration-200 bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl hover:-translate-y-0.5'
+                      : 'flex items-center justify-center px-6 py-3 rounded-xl font-medium text-white transition-all duration-200 bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer'
                   }
                   aria-label={t('save_card')}
                 >
@@ -1066,7 +1065,7 @@ const CardSelector = () => {
                   className={
                     !selectedImage || actionLoading
                       ? 'flex items-center justify-center px-6 py-3 rounded-xl font-medium text-white transition-all duration-200 bg-gray-300 dark:bg-gray-600 cursor-not-allowed'
-                      : 'flex items-center justify-center px-6 py-3 rounded-xl font-medium text-white transition-all duration-200 bg-green-600 hover:bg-green-700 shadow-lg hover:shadow-xl hover:-translate-y-0.5'
+                      : 'flex items-center justify-center px-6 py-3 rounded-xl font-medium text-white transition-all duration-200 bg-green-600 hover:bg-green-700 shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer'
                   }
                   aria-label={t('share_card')}
                 >
@@ -1088,37 +1087,39 @@ const CardSelector = () => {
 
 // Reusable Components
 const CardSection = ({ title, cards, selectedImage, selectCard, type }) => (
-  <div>
-    <h3 className="text-lg font-medium text-gray-800 dark:text-white mb-4">
-      {title}
-    </h3>
-    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-      {cards.map((card, index) => (
-        <div
-          key={`${type}-${index}`}
-          className={
-            selectedImage?.src === card.src
-              ? `aspect-${
-                  type === 'whatsapp' ? '[9/16]' : 'video'
-                } rounded-xl overflow-hidden shadow-md border-2 transition-transform duration-200 cursor-pointer hover:scale-105 hover:shadow-xl border-blue-600 ring-2 ring-blue-200`
-              : `aspect-${
-                  type === 'whatsapp' ? '[9/16]' : 'video'
-                } rounded-xl overflow-hidden shadow-md border-2 transition-transform duration-200 cursor-pointer hover:scale-105 hover:shadow-xl border-transparent`
-          }
-          onClick={() => selectCard(card)}
-          onKeyDown={(e) => e.key === 'Enter' && selectCard(card)}
-          role="button"
-          tabIndex={0}
-          aria-label={`${title} ${index + 1}`}
-        >
-          <img
-            src={card.src}
-            alt={`${title} ${index + 1}`}
-            className="w-full h-full object-cover"
-            loading="lazy"
-          />
-        </div>
-      ))}
+  <div className="w-full flex justify-center">
+    <div className="w-full max-w-5xl">
+      <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-6">
+        {title}
+      </h3>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center mx-auto">
+        {cards.map((card, index) => (
+          <div
+            key={`${type}-${index}`}
+            className={
+              selectedImage?.src === card.src
+                ? `aspect-[${
+                    type === 'whatsapp' ? '9/16' : '16/9'
+                  }] rounded-lg overflow-hidden shadow-lg border-4 transition-transform duration-300 cursor-pointer hover:scale-105 hover:shadow-2xl border-blue-600 ring-2 ring-blue-200/50`
+                : `aspect-[${
+                    type === 'whatsapp' ? '9/16' : '16/9'
+                  }] rounded-lg overflow-hidden shadow-lg border-2 transition-transform duration-300 cursor-pointer hover:scale-105 hover:shadow-2xl border-gray-200 dark:border-gray-600`
+            }
+            onClick={() => selectCard(card)}
+            onKeyDown={(e) => e.key === 'Enter' && selectCard(card)}
+            role="button"
+            tabIndex={0}
+            aria-label={`${title} ${index + 1}`}
+          >
+            <img
+              src={card.src}
+              alt={`${title} ${index + 1}`}
+              className="w-full h-full object-contain"
+              loading="lazy"
+            />
+          </div>
+        ))}
+      </div>
     </div>
   </div>
 );
@@ -1151,7 +1152,7 @@ const Select = ({ value, onChange, options, ariaLabel }) => (
     <select
       value={value}
       onChange={onChange}
-      className="appearance-none w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-800 dark:text-white"
+      className="appearance-none w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-800 dark:text-white cursor-pointer"
       aria-label={ariaLabel}
     >
       {options.map((option) => (
