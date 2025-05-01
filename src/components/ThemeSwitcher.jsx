@@ -28,9 +28,7 @@ const ThemeSwitcher = () => {
     <div className="flex items-center justify-around h-8 w-14 bg-gray-100 dark:bg-gray-700 rounded-2xl shadow-sm transition-colors duration-300">
       <button
         className={`${activeCircleStyles} ${
-          theme === 'light'
-            ? 'bg-white ring-[#ee2e3a]/50'
-            : 'bg-gray-900 ring-gray-600'
+          theme === 'light' ? 'bg-white ring-[#ee2e3a]/50' : ' ring-gray-600'
         }`}
         onClick={() => themeToggleHandler('light')}
         aria-label="Switch to light mode"

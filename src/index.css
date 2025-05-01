@@ -23,6 +23,10 @@
 body {
   @apply bg-[var(--background)] text-[var(--foreground)];
 }
+a,
+button {
+  cursor: pointer;
+}
 
 ::-webkit-scrollbar {
   width: 8px;
