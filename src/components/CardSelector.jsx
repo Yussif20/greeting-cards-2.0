@@ -38,14 +38,12 @@ const CardSelector = () => {
   const [fontSize, setFontSize] = useState(60);
   const [textShadow, setTextShadow] = useState(2);
   const [fontsLoaded, setFontsLoaded] = useState(false);
-  const [enableCustomization, setEnableCustomization] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [isLoading, setIsLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [error, setError] = useState(null);
   const [history, setHistory] = useState([]);
-
   const [zoomLevel, setZoomLevel] = useState(1);
 
   const previewRef = useRef(null);
@@ -288,12 +286,6 @@ const CardSelector = () => {
           y: card.type === 'whatsapp' ? img.height * 0.8 : img.height / 2,
         });
         setFontSize(card.type === 'whatsapp' ? 80 : 180);
-        if (!enableCustomization) {
-          setColor('#ffffff');
-          setFont(fontLanguage === 'arabic' ? 'Cairo' : 'Roboto');
-          setFontStyle('normal');
-          setTextShadow(2);
-        }
         setIsLoading(false);
       };
 
@@ -304,7 +296,7 @@ const CardSelector = () => {
         setIsLoading(false);
       };
     },
-    [enableCustomization, fontLanguage, t]
+    [t]
   );
 
   // Apply preset
@@ -373,7 +365,7 @@ const CardSelector = () => {
   // Handle preview interactions
   const handlePreviewClick = useCallback(
     (e) => {
-      if (!enableCustomization || !selectedImage || isDragging) return;
+      if (!selectedImage || isDragging) return;
       saveToHistory();
       const preview = previewRef.current;
       const rect = preview.getBoundingClientRect();
@@ -384,18 +376,12 @@ const CardSelector = () => {
       setNamePosition({ x, y });
       debouncedUpdatePreview();
     },
-    [
-      enableCustomization,
-      selectedImage,
-      isDragging,
-      saveToHistory,
-      debouncedUpdatePreview,
-    ]
+    [selectedImage, isDragging, saveToHistory, debouncedUpdatePreview]
   );
 
   const handleMouseDown = useCallback(
     (e) => {
-      if (!enableCustomization || !selectedImage) return;
+      if (!selectedImage) return;
       e.preventDefault();
       saveToHistory();
       setIsDragging(true);
@@ -406,7 +392,7 @@ const CardSelector = () => {
         y: e.clientY - rect.top - rect.height / 2,
       });
     },
-    [enableCustomization, selectedImage, saveToHistory]
+    [selectedImage, saveToHistory]
   );
 
   const handleMouseMove = useCallback(
@@ -431,7 +417,7 @@ const CardSelector = () => {
 
   const handleTouchStart = useCallback(
     (e) => {
-      if (!enableCustomization || !selectedImage) return;
+      if (!selectedImage) return;
       saveToHistory();
       const touch = e.touches[0];
       setIsDragging(true);
@@ -442,7 +428,7 @@ const CardSelector = () => {
         y: touch.clientY - rect.top - rect.height / 2,
       });
     },
-    [enableCustomization, selectedImage, saveToHistory]
+    [selectedImage, saveToHistory]
   );
 
   const handleTouchMove = useCallback(
@@ -749,38 +735,13 @@ const CardSelector = () => {
           {/* Customization Panel */}
           <div className="flex flex-col">
             <div className="bg-gradient-card rounded-xl shadow-card p-4 xs:p-6 sm:p-8">
-              <div className="flex items-center justify-between mb-4 xs:mb-6">
+              <div className="flex justify-start mb-4 xs:mb-6">
                 <h2 className="flex items-center text-lg xs:text-xl sm:text-2xl font-semibold text-foreground">
                   <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white mr-2 xs:mr-3">
                     2
                   </span>
                   {t('guide_name')}
                 </h2>
-                <label className="flex items-center cursor-pointer">
-                  <span className="text-xs xs:text-sm text-gray-600 dark:text-gray-400 mr-2 xs:mr-3">
-                    {t('enable_customization')}
-                  </span>
-                  <div
-                    className={
-                      enableCustomization
-                        ? 'w-10 xs:w-12 h-5 xs:h-6 rounded-full flex items-center px-1 transition-colors bg-blue-600'
-                        : 'w-10 xs:w-12 h-5 xs:h-6 rounded-full flex items-center px-1 transition-colors bg-gray-300 dark:bg-gray-600'
-                    }
-                    onClick={() => setEnableCustomization(!enableCustomization)}
-                  >
-                    <div
-                      className={
-                        enableCustomization
-                          ? `w-4 xs:w-5 h-4 xs:h-5 rounded-full bg-white shadow-md transform transition-transform ${
-                              i18n.language === 'ar'
-                                ? 'translate-x-[-20px] xs:translate-x-[-24px]'
-                                : 'translate-x-5 xs:translate-x-6'
-                            }`
-                          : 'w-4 xs:w-5 h-4 xs:h-5 rounded-full bg-white shadow-md transform transition-transform'
-                      }
-                    ></div>
-                  </div>
-                </label>
               </div>
 
               <div className="space-y-6 xs:space-y-8">
@@ -795,184 +756,180 @@ const CardSelector = () => {
                   className="w-full px-3 xs:px-4 py-2 xs:py-2.5 sm:py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all text-xs xs:text-sm sm:text-base text-foreground cursor-text"
                   aria-label={t('enter_name')}
                 />
-                {enableCustomization && (
-                  <>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 xs:gap-8">
-                      <div>
-                        <label className="flex items-center text-xs xs:text-sm font-medium text-foreground mb-1 xs:mb-2">
-                          <Palette size={14} className="mr-2" />
-                          {t('guide_color')}
-                        </label>
-                        <div className="flex items-center">
-                          <input
-                            type="color"
-                            value={color}
-                            onChange={(e) => {
-                              saveToHistory();
-                              setColor(e.target.value);
-                            }}
-                            className="w-10 xs:w-12 h-10 xs:h-12 rounded-lg border-none cursor-pointer shadow-sm"
-                            aria-label={t('guide_color')}
-                          />
-                          <span className="ms-3 text-xs xs:text-sm font-mono text-gray-600 dark:text-gray-400">
-                            {color}
-                          </span>
-                        </div>
-                      </div>
-                      <div>
-                        <label className="flex items-center text-xs xs:text-sm font-medium text-foreground mb-1 xs:mb-2">
-                          {t('font_language')}
-                        </label>
-                        <div className="flex items-center space-x-4 xs:space-x-6">
-                          <RadioButton
-                            label={t('arabic')}
-                            checked={fontLanguage === 'arabic'}
-                            onChange={() => {
-                              saveToHistory();
-                              setFontLanguage('arabic');
-                              setFont('Cairo');
-                              loadFontOnDemand('Cairo');
-                            }}
-                          />
-                          <RadioButton
-                            label={t('english')}
-                            checked={fontLanguage === 'english'}
-                            onChange={() => {
-                              saveToHistory();
-                              setFontLanguage('english');
-                              setFont('Roboto');
-                              loadFontOnDemand('Roboto');
-                            }}
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <label className="flex items-center text-xs xs:text-sm font-medium text-foreground mb-1 xs:mb-2">
-                          <Type size={14} className="mr-2" />
-                          {t('guide_font')}
-                        </label>
-                        <Select
-                          value={font}
-                          onChange={(e) => {
-                            saveToHistory();
-                            setFont(e.target.value);
-                            loadFontOnDemand(e.target.value);
-                          }}
-                          options={
-                            fontLanguage === 'arabic'
-                              ? fontConfig.arabic.map((f) => ({
-                                  value: f,
-                                  label: f,
-                                }))
-                              : fontConfig.english.map((f) => ({
-                                  value: f,
-                                  label: f,
-                                }))
-                          }
-                          aria-label={t('guide_font')}
-                        />
-                      </div>
-                      <div>
-                        <label className="flex items-center text-xs xs:text-sm font-medium text-foreground mb-1 xs:mb-2">
-                          {t('guide_font_style')}
-                        </label>
-                        <Select
-                          value={fontStyle}
-                          onChange={(e) => {
-                            saveToHistory();
-                            setFontStyle(e.target.value);
-                          }}
-                          options={[
-                            { value: 'normal', label: t('normal') },
-                            { value: 'bold', label: t('bold') },
-                            { value: 'italic', label: t('italic') },
-                          ]}
-                          aria-label={t('guide_font_style')}
-                        />
-                      </div>
-                      <div>
-                        <label className="flex items-center text-xs xs:text-sm font-medium text-foreground mb-1 xs:mb-2">
-                          {t('guide_font_size')}
-                        </label>
-                        <div className="flex items-center gap-2 xs:gap-3">
-                          <input
-                            type="range"
-                            min="20"
-                            max="300"
-                            step="5"
-                            value={fontSize}
-                            onChange={(e) => {
-                              saveToHistory();
-                              setFontSize(Number(e.target.value));
-                            }}
-                            className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg cursor-pointer accent-blue-600"
-                            aria-label={t('guide_font_size')}
-                          />
-                          <span className="text-xs xs:text-sm font-mono w-12 xs:w-14 text-right text-gray-600 dark:text-gray-400">
-                            {fontSize}px
-                          </span>
-                        </div>
-                      </div>
-                      <div>
-                        <label className="flex items-center text-xs xs:text-sm font-medium text-foreground mb-1 xs:mb-2">
-                          {t('text_shadow')}
-                        </label>
-                        <div className="flex items-center gap-2 xs:gap-3">
-                          <input
-                            type="range"
-                            min="0"
-                            max="10"
-                            step="0.5"
-                            value={textShadow}
-                            onChange={(e) => {
-                              saveToHistory();
-                              setTextShadow(Number(e.target.value));
-                            }}
-                            className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg cursor-pointer accent-blue-600"
-                            aria-label={t('text_shadow')}
-                          />
-                          <span className="text-xs xs:text-sm font-mono w-12 xs:w-14 text-right text-gray-600 dark:text-gray-400">
-                            {textShadow}px
-                          </span>
-                        </div>
-                      </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 xs:gap-8">
+                  <div>
+                    <label className="flex items-center text-xs xs:text-sm font-medium text-foreground mb-1 xs:mb-2">
+                      <Palette size={14} className="mr-2" />
+                      {t('guide_color')}
+                    </label>
+                    <div className="flex items-center">
+                      <input
+                        type="color"
+                        value={color}
+                        onChange={(e) => {
+                          saveToHistory();
+                          setColor(e.target.value);
+                        }}
+                        className="w-10 xs:w-12 h-10 xs:h-12 rounded-lg border-none cursor-pointer shadow-sm"
+                        aria-label={t('guide_color')}
+                      />
+                      <span className="ms-3 text-xs xs:text-sm font-mono text-gray-600 dark:text-gray-400">
+                        {color}
+                      </span>
                     </div>
-                    <div className="flex flex-wrap gap-2 xs:gap-4">
-                      {Object.keys(presets).map((preset) => (
-                        <button
-                          key={preset}
-                          onClick={() => applyPreset(preset)}
-                          className="px-2.5 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-all cursor-pointer text-xs sm:text-sm"
-                        >
-                          {t(preset)}
-                        </button>
-                      ))}
+                  </div>
+                  <div>
+                    <label className="flex items-center text-xs xs:text-sm font-medium text-foreground mb-1 xs:mb-2">
+                      {t('font_language')}
+                    </label>
+                    <div className="flex items-center space-x-4 xs:space-x-6">
+                      <RadioButton
+                        label={t('arabic')}
+                        checked={fontLanguage === 'arabic'}
+                        onChange={() => {
+                          saveToHistory();
+                          setFontLanguage('arabic');
+                          setFont('Cairo');
+                          loadFontOnDemand('Cairo');
+                        }}
+                      />
+                      <RadioButton
+                        label={t('english')}
+                        checked={fontLanguage === 'english'}
+                        onChange={() => {
+                          saveToHistory();
+                          setFontLanguage('english');
+                          setFont('Roboto');
+                          loadFontOnDemand('Roboto');
+                        }}
+                      />
                     </div>
-                    <div className="flex gap-2 xs:gap-4">
-                      <button
-                        onClick={undo}
-                        disabled={history.length === 0}
-                        className={
-                          history.length === 0
-                            ? 'flex items-center px-2.5 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 rounded-lg transition-all bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed text-xs sm:text-sm'
-                            : 'flex items-center px-2.5 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 rounded-lg transition-all bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-200 hover:bg-yellow-200 dark:hover:bg-yellow-800 cursor-pointer text-xs sm:text-sm'
-                        }
-                        aria-label={t('undo')}
-                      >
-                        <Undo2 size={14} className="mr-2" />
-                        {t('undo')}
-                      </button>
-                      <button
-                        onClick={reset}
-                        className="flex items-center px-2.5 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 rounded-lg hover:bg-red-200 dark:hover:bg-red-800 transition-all cursor-pointer text-xs sm:text-sm"
-                        aria-label={t('reset')}
-                      >
-                        <RefreshCw size={14} className="mr-2" />
-                        {t('reset')}
-                      </button>
+                  </div>
+                  <div>
+                    <label className="flex items-center text-xs xs:text-sm font-medium text-foreground mb-1 xs:mb-2">
+                      <Type size={14} className="mr-2" />
+                      {t('guide_font')}
+                    </label>
+                    <Select
+                      value={font}
+                      onChange={(e) => {
+                        saveToHistory();
+                        setFont(e.target.value);
+                        loadFontOnDemand(e.target.value);
+                      }}
+                      options={
+                        fontLanguage === 'arabic'
+                          ? fontConfig.arabic.map((f) => ({
+                              value: f,
+                              label: f,
+                            }))
+                          : fontConfig.english.map((f) => ({
+                              value: f,
+                              label: f,
+                            }))
+                      }
+                      aria-label={t('guide_font')}
+                    />
+                  </div>
+                  <div>
+                    <label className="flex items-center text-xs xs:text-sm font-medium text-foreground mb-1 xs:mb-2">
+                      {t('guide_font_style')}
+                    </label>
+                    <Select
+                      value={fontStyle}
+                      onChange={(e) => {
+                        saveToHistory();
+                        setFontStyle(e.target.value);
+                      }}
+                      options={[
+                        { value: 'normal', label: t('normal') },
+                        { value: 'bold', label: t('bold') },
+                        { value: 'italic', label: t('italic') },
+                      ]}
+                      aria-label={t('guide_font_style')}
+                    />
+                  </div>
+                  <div>
+                    <label className="flex items-center text-xs xs:text-sm font-medium text-foreground mb-1 xs:mb-2">
+                      {t('guide_font_size')}
+                    </label>
+                    <div className="flex items-center gap-2 xs:gap-3">
+                      <input
+                        type="range"
+                        min="20"
+                        max="300"
+                        step="5"
+                        value={fontSize}
+                        onChange={(e) => {
+                          saveToHistory();
+                          setFontSize(Number(e.target.value));
+                        }}
+                        className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg cursor-pointer accent-blue-600"
+                        aria-label={t('guide_font_size')}
+                      />
+                      <span className="text-xs xs:text-sm font-mono w-12 xs:w-14 text-right text-gray-600 dark:text-gray-400">
+                        {fontSize}px
+                      </span>
                     </div>
-                  </>
-                )}
+                  </div>
+                  <div>
+                    <label className="flex items-center text-xs xs:text-sm font-medium text-foreground mb-1 xs:mb-2">
+                      {t('text_shadow')}
+                    </label>
+                    <div className="flex items-center gap-2 xs:gap-3">
+                      <input
+                        type="range"
+                        min="0"
+                        max="10"
+                        step="0.5"
+                        value={textShadow}
+                        onChange={(e) => {
+                          saveToHistory();
+                          setTextShadow(Number(e.target.value));
+                        }}
+                        className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg cursor-pointer accent-blue-600"
+                        aria-label={t('text_shadow')}
+                      />
+                      <span className="text-xs xs:text-sm font-mono w-12 xs:w-14 text-right text-gray-600 dark:text-gray-400">
+                        {textShadow}px
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2 xs:gap-4">
+                  {Object.keys(presets).map((preset) => (
+                    <button
+                      key={preset}
+                      onClick={() => applyPreset(preset)}
+                      className="px-2.5 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-all cursor-pointer text-xs sm:text-sm"
+                    >
+                      {t(preset)}
+                    </button>
+                  ))}
+                </div>
+                <div className="flex gap-2 xs:gap-4">
+                  <button
+                    onClick={undo}
+                    disabled={history.length === 0}
+                    className={
+                      history.length === 0
+                        ? 'flex items-center px-2.5 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 rounded-lg transition-all bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed text-xs sm:text-sm'
+                        : 'flex items-center px-2.5 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 rounded-lg transition-all bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-200 hover:bg-yellow-200 dark:hover:bg-yellow-800 cursor-pointer text-xs sm:text-sm'
+                    }
+                    aria-label={t('undo')}
+                  >
+                    <Undo2 size={14} className="mr-2" />
+                    {t('undo')}
+                  </button>
+                  <button
+                    onClick={reset}
+                    className="flex items-center px-2.5 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 rounded-lg hover:bg-red-200 dark:hover:bg-red-800 transition-all cursor-pointer text-xs sm:text-sm"
+                    aria-label={t('reset')}
+                  >
+                    <RefreshCw size={14} className="mr-2" />
+                    {t('reset')}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -987,12 +944,10 @@ const CardSelector = () => {
                   </span>
                   {t('preview')}
                 </h2>
-                {enableCustomization && (
-                  <div className="flex items-center text-xs xs:text-sm text-blue-600 dark:text-blue-400">
-                    <Wand2 size={14} className="mr-2" />
-                    {t('position_tip')}
-                  </div>
-                )}
+                <div className="flex items-center text-xs xs:text-sm text-blue-600 dark:text-blue-400">
+                  <Wand2 size={14} className="mr-2" />
+                  {t('position_tip')}
+                </div>
               </div>
 
               <div
@@ -1035,11 +990,7 @@ const CardSelector = () => {
                       <span
                         id="name-preview"
                         ref={namePreviewRef}
-                        className={
-                          enableCustomization
-                            ? 'absolute cursor-move select-none'
-                            : 'absolute select-none cursor-default'
-                        }
+                        className="absolute cursor-move select-none"
                         style={{
                           WebkitTextStroke:
                             color === '#000000' ? '0.5px white' : 'none',
@@ -1058,7 +1009,7 @@ const CardSelector = () => {
                 )}
               </div>
 
-              {enableCustomization && selectedImage && (
+              {selectedImage && (
                 <div className="flex items-center justify-center mt-3 xs:mt-4">
                   <button
                     onClick={() =>
