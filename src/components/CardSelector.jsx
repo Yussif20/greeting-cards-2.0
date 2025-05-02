@@ -45,6 +45,7 @@ const CardSelector = () => {
   const [actionLoading, setActionLoading] = useState(false);
   const [error, setError] = useState(null);
   const [history, setHistory] = useState([]);
+
   const [zoomLevel, setZoomLevel] = useState(1);
 
   const previewRef = useRef(null);
@@ -231,28 +232,44 @@ const CardSelector = () => {
   ]);
 
   // Handle tab change
-  const handleTabChange = useCallback((category) => {
-    setActiveTab(category);
-    const activeIndex = Object.keys(imageCategories).indexOf(category);
-    const activeTabRef = tabRefs.current[activeIndex];
-    if (activeTabRef) {
-      const container = activeTabRef.parentElement;
-      const containerRect = container.getBoundingClientRect();
-      const tabRect = activeTabRef.getBoundingClientRect();
-      if (
-        tabRect.left < containerRect.left ||
-        tabRect.right > containerRect.right
-      ) {
-        const scrollLeft =
-          tabRect.left +
-          container.scrollLeft -
-          containerRect.left -
-          containerRect.width / 2 +
-          tabRect.width / 2;
-        container.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+  const handleTabChange = useCallback(
+    (category) => {
+      setActiveTab(category);
+      const activeIndex = Object.keys(imageCategories).indexOf(category);
+      const activeTabRef = tabRefs.current[activeIndex];
+      if (activeTabRef) {
+        const container = activeTabRef.parentElement;
+        const containerRect = container.getBoundingClientRect();
+        const tabRect = activeTabRef.getBoundingClientRect();
+        const isRTL = i18n.language === 'ar';
+        const isOffScreen =
+          (isRTL && tabRect.right > containerRect.right) ||
+          (!isRTL && tabRect.left < containerRect.left) ||
+          tabRect.right > containerRect.right;
+
+        if (isOffScreen) {
+          const scrollLeft = isRTL
+            ? container.scrollLeft +
+              (tabRect.right - containerRect.right) +
+              tabRect.width / 2
+            : tabRect.left +
+              container.scrollLeft -
+              containerRect.left -
+              containerRect.width / 2 +
+              tabRect.width / 2;
+          container.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+        }
       }
+    },
+    [i18n.language]
+  );
+
+  // Auto-scroll to RHC on mount
+  useEffect(() => {
+    if (activeTab === 'RHC') {
+      handleTabChange('RHC');
     }
-  }, []);
+  }, [handleTabChange]);
 
   // Select a card
   const selectCard = useCallback(
@@ -655,7 +672,7 @@ const CardSelector = () => {
         )}
 
         {/* Card Selection Section */}
-        <section className="max-w-md xs:max-w-lg sm:max-w-4xl mx-2 xs:mx-4 sm:mx-auto mb-4 xs:mb-6 sm:mb-8 lg:mb-12 animate-fade-in delay-100">
+        <section className="max-w-md xs:max-w-lg sm:max-w-4xl mx-2 xs:mx-4 sm:mx-auto mb-4 xs:mb-6 sm:mb-8 lg:mb-12 animate-fade-in delay-100 overflow-x-hidden">
           <div className="w-full">
             <h2 className="text-xl xs:text-2xl sm:text-3xl lg:text-4xl font-extrabold text-foreground mb-4 xs:mb-6 sm:mb-8 flex items-center pr-4 rounded-lg">
               <span className="inline-flex items-center justify-center w-8 xs:w-10 sm:w-12 h-8 xs:h-10 sm:h-12 rounded-full bg-blue-600 text-white mr-2 xs:mr-3 sm:mr-4">
@@ -664,22 +681,43 @@ const CardSelector = () => {
               {t('select_card')}
             </h2>
             <div className="bg-gradient-card rounded-xl shadow-card p-4 xs:p-6 sm:p-8">
-              <div className="flex justify-center overflow-x-auto scrollbar-hidden snap-x snap-mandatory mb-4 xs:mb-6 sm:mb-8 gap-1 xs:gap-2 sm:gap-4">
+              <div className="relative flex justify-start overflow-x-auto scrollbar-hidden snap-x snap-mandatory mb-4 xs:mb-6 sm:mb-8 gap-0.5 xs:gap-1 sm:gap-2 scroll-smooth">
                 {Object.keys(imageCategories).map((category, index) => (
                   <button
                     key={category}
                     ref={(el) => (tabRefs.current[index] = el)}
                     className={
                       activeTab === category
-                        ? 'snap-center shrink-0 py-1.5 xs:py-2 sm:py-3 px-3 xs:px-4 sm:px-6 min-w-[80px] xs:min-w-[100px] rounded-full font-semibold text-xs xs:text-sm sm:text-base transition-all bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg'
-                        : 'snap-center shrink-0 py-1.5 xs:py-2 sm:py-3 px-3 xs:px-4 sm:px-6 min-w-[80px] xs:min-w-[100px] rounded-full font-semibold text-xs xs:text-sm sm:text-base transition-all text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer'
+                        ? 'snap-center shrink-0 py-1 xs:py-1.5 sm:py-2 px-2.5 xs:px-3 sm:px-4 min-w-[70px] xs:min-w-[80px] sm:min-w-[100px] rounded-full font-semibold text-xs sm:text-sm transition-all bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg'
+                        : 'snap-center shrink-0 py-1 xs:py-1.5 sm:py-2 px-2.5 xs:px-3 sm:px-4 min-w-[70px] xs:min-w-[80px] sm:min-w-[100px] rounded-full font-semibold text-xs sm:text-sm transition-all text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer'
                     }
                     onClick={() => handleTabChange(category)}
-                    aria-current={activeTab === category ? 'page' : undefined}
+                    onKeyDown={(e) =>
+                      e.key === 'Enter' && handleTabChange(category)
+                    }
+                    role="tab"
+                    aria-controls={`card-section-${category}`}
+                    aria-selected={activeTab === category}
+                    tabIndex={0}
                   >
                     {category}
                   </button>
                 ))}
+                {/* Fade indicators */}
+                <div
+                  className={`absolute top-0 bottom-0 w-6 xs:w-8 pointer-events-none bg-gradient-to-${
+                    i18n.language === 'ar' ? 'r' : 'l'
+                  } from-gray-100/50 dark:from-gray-800/50 to-transparent ${
+                    i18n.language === 'ar' ? 'right-0' : 'left-0'
+                  }`}
+                ></div>
+                <div
+                  className={`absolute top-0 bottom-0 w-6 xs:w-8 pointer-events-none bg-gradient-to-${
+                    i18n.language === 'ar' ? 'l' : 'r'
+                  } from-gray-100/50 dark:from-gray-800/50 to-transparent ${
+                    i18n.language === 'ar' ? 'left-0' : 'right-0'
+                  }`}
+                ></div>
               </div>
               <div className="space-y-6 xs:space-y-8 sm:space-y-10">
                 <CardSection
@@ -688,6 +726,7 @@ const CardSelector = () => {
                   selectedImage={selectedImage}
                   selectCard={selectCard}
                   type="whatsapp"
+                  id={`card-section-${activeTab}-whatsapp`}
                 />
                 <CardSection
                   title={t('linkedin_post')}
@@ -695,6 +734,7 @@ const CardSelector = () => {
                   selectedImage={selectedImage}
                   selectCard={selectCard}
                   type="linkedin"
+                  id={`card-section-${activeTab}-linkedin`}
                 />
               </div>
             </div>
@@ -1086,8 +1126,8 @@ const CardSelector = () => {
 };
 
 // Reusable Components
-const CardSection = ({ title, cards, selectedImage, selectCard, type }) => (
-  <div className="w-full flex justify-center">
+const CardSection = ({ title, cards, selectedImage, selectCard, type, id }) => (
+  <div className="w-full flex justify-center" id={id}>
     <div className="w-full max-w-md xs:max-w-lg sm:max-w-4xl">
       <h3 className="text-lg xs:text-xl sm:text-2xl font-semibold text-foreground mb-4 xs:mb-6">
         {title}
