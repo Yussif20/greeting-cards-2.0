@@ -1,4 +1,3 @@
-/* src/index.css */
 @import 'tailwindcss';
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -8,6 +7,8 @@
   --background: #e5e7eb; /* gray-200 */
   --foreground: #1f2937; /* gray-800 */
   --card-bg: #ffffff; /* white */
+  --card-gradient-start: #ffffff; /* white */
+  --card-gradient-end: #f3f4f6; /* gray-50 */
   --border: #d1d5db; /* gray-300 */
 }
 
@@ -16,56 +17,120 @@
   --background: #1f2937; /* gray-800 */
   --foreground: #e5e7eb; /* gray-200 */
   --card-bg: #374151; /* gray-700 */
+  --card-gradient-start: #374151; /* gray-800 */
+  --card-gradient-end: #4b5563; /* gray-700 */
   --border: #4b5563; /* gray-600 */
 }
 
 /* Apply variables */
 body {
-  @apply bg-[var(--background)] text-[var(--foreground)];
+  @apply bg-[var(--background)] text-[var(--foreground)] font-sans;
 }
+
 a {
   cursor: pointer;
 }
-
+/* WebKit Browsers (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: white;
-  border-radius: 2px;
-}
-html.dark ::-webkit-scrollbar-track {
-  background: #171515;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #155dfc;
-  border-radius: 5px;
-  transition: 0.3 ease all;
+  background-color: rgba(100, 116, 139, 0.4); /* slate-500 with transparency */
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #457efb;
+  background-color: rgba(100, 116, 139, 0.6);
 }
 
-.bg-background {
-  background-color: var(--background);
+/* Dark mode scrollbar (WebKit) */
+html.dark ::-webkit-scrollbar-thumb {
+  background-color: rgba(203, 213, 225, 0.3); /* slate-200 */
 }
 
-.text-foreground {
-  color: var(--foreground);
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(203, 213, 225, 0.5);
 }
 
-.bg-card {
-  background-color: var(--card-bg);
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 116, 139, 0.4) transparent;
 }
 
-.border {
-  border-color: var(--border);
+html.dark * {
+  scrollbar-color: rgba(203, 213, 225, 0.3) transparent;
+}
+/* Custom utilities */
+@layer utilities {
+  .bg-background {
+    background-color: var(--background);
+  }
+
+  .text-foreground {
+    color: var(--foreground);
+  }
+
+  .bg-card {
+    background-color: var(--card-bg);
+  }
+
+  .bg-gradient-card {
+    background-image: linear-gradient(
+      to bottom right,
+      var(--card-gradient-start),
+      var(--card-gradient-end)
+    );
+  }
+
+  .shadow-card {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+      0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  .border {
+    border-color: var(--border);
+  }
+
+  .scrollbar-hidden {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+  }
+
+  .transition-all {
+    transition: all 0.3s ease;
+  }
 }
 
-/* Animations (unchanged) */
+/* RTL support */
+[dir='rtl'] {
+  .ms-2 {
+    margin-inline-start: 0.5rem;
+    margin-inline-end: unset;
+  }
+
+  .me-2 {
+    margin-inline-end: 0.5rem;
+    margin-inline-start: unset;
+  }
+
+  .transform.rotate-180 {
+    transform: rotate(-180deg);
+  }
+}
+
+/* Animations */
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -97,11 +162,13 @@ html.dark ::-webkit-scrollbar-track {
 }
 
 .animate-fade-in {
-  animation: fade-in 1s ease-out;
+  animation: fade-in 0.5s ease-out;
+  will-change: opacity;
 }
 
 .animate-slide-up {
-  animation: slide-up 0.8s ease-out;
+  animation: slide-up 0.5s ease-out;
+  will-change: transform, opacity;
 }
 
 .animate-slide-up.delay-100 {
@@ -118,4 +185,5 @@ html.dark ::-webkit-scrollbar-track {
 
 .animate-pulse {
   animation: pulse 8s infinite ease-in-out;
+  will-change: opacity;
 }

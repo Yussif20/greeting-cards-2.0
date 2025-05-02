@@ -658,7 +658,7 @@ const CardSelector = () => {
         {/* Card Selection Section */}
         <section className="max-w-6xl mx-auto mb-12 flex justify-center">
           <div className="w-full">
-            <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-8 flex items-center  pr-4 rounded-lg">
+            <h2 className="text-3xl font-extrabold text-gray-800 dark:text-white mb-8 flex items-center pr-4 rounded-lg">
               <span className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-600 text-white mr-4">
                 1
               </span>
@@ -732,7 +732,11 @@ const CardSelector = () => {
                     <div
                       className={
                         enableCustomization
-                          ? 'w-5 h-5 rounded-full bg-white shadow-md transform transition-transform translate-x-6'
+                          ? `w-5 h-5 rounded-full bg-white shadow-md transform transition-transform ${
+                              i18n.language === 'ar'
+                                ? 'translate-x-[-24px]'
+                                : 'translate-x-6'
+                            }`
                           : 'w-5 h-5 rounded-full bg-white shadow-md transform transition-transform'
                       }
                     ></div>
@@ -771,10 +775,7 @@ const CardSelector = () => {
                             className="w-12 h-12 rounded-lg border-none cursor-pointer shadow-sm"
                             aria-label={t('guide_color')}
                           />
-                          <span
-                            className="ml-3 text-sm font-mono text-gray- etmeye
-                            600 dark:text-gray-400"
-                          >
+                          <span className="ml-3 text-sm font-mono text-gray-600 dark:text-gray-400">
                             {color}
                           </span>
                         </div>
@@ -978,7 +979,7 @@ const CardSelector = () => {
                       ref={previewRef}
                       className={
                         selectedCardType === 'whatsapp'
-                          ? 'relative rounded-xl shadow-xl bg-center bg-no-repeat bg-contain aspect-[9/16] w-full max-w-lg overflow-hidden cursor-pointer transition-transform duration-200'
+                          ? 'relative rounded-xl shadow-xl bg-center bg-no-repeat bg-contain aspect-[9/16] w-full max-w-xs overflow-hidden cursor-pointer transition-transform duration-200'
                           : 'relative rounded-xl shadow-xl bg-center bg-no-repeat bg-contain aspect-[16/9] w-full max-w-lg overflow-hidden cursor-pointer transition-transform duration-200'
                       }
                       onClick={handlePreviewClick}
