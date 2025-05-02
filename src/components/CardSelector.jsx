@@ -365,7 +365,6 @@ const CardSelector = () => {
       const x = (e.clientX - rect.left) * scaleX;
       const y = (e.clientY - rect.top) * scaleY;
       setNamePosition({ x, y });
-      console.log('New name position:', { x, y }); // Debug log
       debouncedUpdatePreview();
     },
     [
@@ -634,21 +633,21 @@ const CardSelector = () => {
       dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}
       ref={containerRef}
     >
-      <main className="flex-1 container mx-auto px-4 py-8 lg:px-8 lg:py-12 flex flex-col">
+      <main className="flex-1 container mx-auto w-full px-2 xs:px-4 sm:px-6 lg:px-8 py-4 xs:py-6 sm:py-8 lg:py-12 flex flex-col gap-4 xs:gap-6 sm:gap-8 lg:gap-10 animate-fade-in">
         {error && (
-          <div className="mb-6 p-4 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 rounded-lg flex items-center">
-            <span>{error}</span>
+          <div className="mb-4 p-3 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 rounded-lg flex items-center max-w-md xs:max-w-lg sm:max-w-3xl lg:max-w-6xl mx-2 xs:mx-4 sm:mx-auto">
+            <span className="text-xs xs:text-sm sm:text-base">{error}</span>
             {error.includes('font_load_error_retry') && (
               <button
                 onClick={retryFontLoading}
-                className="ml-4 px-3 py-1 bg-red-200 dark:bg-red-800 text-red-800 dark:text-red-100 rounded hover:bg-red-300 dark:hover:bg-red-700 cursor-pointer"
+                className="ms-4 px-2 xs:px-3 py-0.5 xs:py-1 bg-red-200 dark:bg-red-800 text-red-800 dark:text-red-100 rounded hover:bg-red-300 dark:hover:bg-red-700 cursor-pointer text-xs"
               >
                 {t('retry')}
               </button>
             )}
             <button
               onClick={() => setError(null)}
-              className="ml-auto text-red-700 dark:text-red-200 hover:text-red-900 dark:hover:text-red-100 cursor-pointer"
+              className="ms-auto text-red-700 dark:text-red-200 hover:text-red-900 dark:hover:text-red-100 cursor-pointer"
             >
               ✕
             </button>
@@ -656,24 +655,24 @@ const CardSelector = () => {
         )}
 
         {/* Card Selection Section */}
-        <section className="max-w-6xl mx-auto mb-12 flex justify-center">
+        <section className="max-w-md xs:max-w-lg sm:max-w-4xl mx-2 xs:mx-4 sm:mx-auto mb-4 xs:mb-6 sm:mb-8 lg:mb-12 animate-fade-in delay-100">
           <div className="w-full">
-            <h2 className="text-3xl font-extrabold text-gray-800 dark:text-white mb-8 flex items-center pr-4 rounded-lg">
-              <span className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-600 text-white mr-4">
+            <h2 className="text-xl xs:text-2xl sm:text-3xl lg:text-4xl font-extrabold text-foreground mb-4 xs:mb-6 sm:mb-8 flex items-center pr-4 rounded-lg">
+              <span className="inline-flex items-center justify-center w-8 xs:w-10 sm:w-12 h-8 xs:h-10 sm:h-12 rounded-full bg-blue-600 text-white mr-2 xs:mr-3 sm:mr-4">
                 1
               </span>
               {t('select_card')}
             </h2>
-            <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl shadow-xl p-8">
-              <div className="flex justify-center overflow-x-auto scrollbar-hidden snap-x snap-mandatory mb-8 gap-2">
+            <div className="bg-gradient-card rounded-xl shadow-card p-4 xs:p-6 sm:p-8">
+              <div className="flex justify-center overflow-x-auto scrollbar-hidden snap-x snap-mandatory mb-4 xs:mb-6 sm:mb-8 gap-1 xs:gap-2 sm:gap-4">
                 {Object.keys(imageCategories).map((category, index) => (
                   <button
                     key={category}
                     ref={(el) => (tabRefs.current[index] = el)}
                     className={
                       activeTab === category
-                        ? 'snap-center shrink-0 py-3 px-6 rounded-full font-semibold text-base transition-all duration-300 bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg'
-                        : 'snap-center shrink-0 py-3 px-6 rounded-full font-semibold text-base transition-all duration-300 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer'
+                        ? 'snap-center shrink-0 py-1.5 xs:py-2 sm:py-3 px-3 xs:px-4 sm:px-6 min-w-[80px] xs:min-w-[100px] rounded-full font-semibold text-xs xs:text-sm sm:text-base transition-all bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg'
+                        : 'snap-center shrink-0 py-1.5 xs:py-2 sm:py-3 px-3 xs:px-4 sm:px-6 min-w-[80px] xs:min-w-[100px] rounded-full font-semibold text-xs xs:text-sm sm:text-base transition-all text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer'
                     }
                     onClick={() => handleTabChange(category)}
                     aria-current={activeTab === category ? 'page' : undefined}
@@ -682,7 +681,7 @@ const CardSelector = () => {
                   </button>
                 ))}
               </div>
-              <div className="space-y-10">
+              <div className="space-y-6 xs:space-y-8 sm:space-y-10">
                 <CardSection
                   title={t('whatsapp_story')}
                   cards={whatsappCards}
@@ -703,48 +702,48 @@ const CardSelector = () => {
         </section>
 
         {/* Divider */}
-        <div className="max-w-6xl mx-auto border-b border-gray-300 dark:border-gray-600 bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent h-px mb-12" />
+        <div className="max-w-md xs:max-w-lg sm:max-w-3xl lg:max-w-6xl mx-2 xs:mx-4 sm:mx-auto border-b border-gray-300 dark:border-gray-600 bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent h-px mb-4 xs:mb-6 sm:mb-8 lg:mb-12" />
 
         {/* Customization and Preview Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 w-full max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 xs:gap-8 sm:gap-10 lg:gap-12 w-full max-w-md xs:max-w-lg sm:max-w-3xl lg:max-w-6xl mx-2 xs:mx-4 sm:mx-auto animate-fade-in delay-200">
           {/* Customization Panel */}
           <div className="flex flex-col">
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="flex items-center text-2xl font-semibold text-gray-800 dark:text-white">
-                  <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white mr-3">
+            <div className="bg-gradient-card rounded-xl shadow-card p-4 xs:p-6 sm:p-8">
+              <div className="flex items-center justify-between mb-4 xs:mb-6">
+                <h2 className="flex items-center text-lg xs:text-xl sm:text-2xl font-semibold text-foreground">
+                  <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white mr-2 xs:mr-3">
                     2
                   </span>
                   {t('guide_name')}
                 </h2>
                 <label className="flex items-center cursor-pointer">
-                  <span className="text-sm text-gray-600 dark:text-gray-400 mr-3">
+                  <span className="text-xs xs:text-sm text-gray-600 dark:text-gray-400 mr-2 xs:mr-3">
                     {t('enable_customization')}
                   </span>
                   <div
                     className={
                       enableCustomization
-                        ? 'w-12 h-6 rounded-full flex items-center px-1 transition-colors bg-blue-600'
-                        : 'w-12 h-6 rounded-full flex items-center px-1 transition-colors bg-gray-300 dark:bg-gray-600'
+                        ? 'w-10 xs:w-12 h-5 xs:h-6 rounded-full flex items-center px-1 transition-colors bg-blue-600'
+                        : 'w-10 xs:w-12 h-5 xs:h-6 rounded-full flex items-center px-1 transition-colors bg-gray-300 dark:bg-gray-600'
                     }
                     onClick={() => setEnableCustomization(!enableCustomization)}
                   >
                     <div
                       className={
                         enableCustomization
-                          ? `w-5 h-5 rounded-full bg-white shadow-md transform transition-transform ${
+                          ? `w-4 xs:w-5 h-4 xs:h-5 rounded-full bg-white shadow-md transform transition-transform ${
                               i18n.language === 'ar'
-                                ? 'translate-x-[-24px]'
-                                : 'translate-x-6'
+                                ? 'translate-x-[-20px] xs:translate-x-[-24px]'
+                                : 'translate-x-5 xs:translate-x-6'
                             }`
-                          : 'w-5 h-5 rounded-full bg-white shadow-md transform transition-transform'
+                          : 'w-4 xs:w-5 h-4 xs:h-5 rounded-full bg-white shadow-md transform transition-transform'
                       }
                     ></div>
                   </div>
                 </label>
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-6 xs:space-y-8">
                 <input
                   type="text"
                   value={name}
@@ -753,15 +752,15 @@ const CardSelector = () => {
                     setName(e.target.value);
                   }}
                   placeholder={t('enter_name')}
-                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all text-gray-800 dark:text-white cursor-text"
+                  className="w-full px-3 xs:px-4 py-2 xs:py-2.5 sm:py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all text-xs xs:text-sm sm:text-base text-foreground cursor-text"
                   aria-label={t('enter_name')}
                 />
                 {enableCustomization && (
                   <>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 xs:gap-8">
                       <div>
-                        <label className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                          <Palette size={18} className="mr-2" />
+                        <label className="flex items-center text-xs xs:text-sm font-medium text-foreground mb-1 xs:mb-2">
+                          <Palette size={14} className="mr-2" />
                           {t('guide_color')}
                         </label>
                         <div className="flex items-center">
@@ -772,19 +771,19 @@ const CardSelector = () => {
                               saveToHistory();
                               setColor(e.target.value);
                             }}
-                            className="w-12 h-12 rounded-lg border-none cursor-pointer shadow-sm"
+                            className="w-10 xs:w-12 h-10 xs:h-12 rounded-lg border-none cursor-pointer shadow-sm"
                             aria-label={t('guide_color')}
                           />
-                          <span className="ml-3 text-sm font-mono text-gray-600 dark:text-gray-400">
+                          <span className="ms-3 text-xs xs:text-sm font-mono text-gray-600 dark:text-gray-400">
                             {color}
                           </span>
                         </div>
                       </div>
                       <div>
-                        <label className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <label className="flex items-center text-xs xs:text-sm font-medium text-foreground mb-1 xs:mb-2">
                           {t('font_language')}
                         </label>
-                        <div className="flex items-center space-x-6">
+                        <div className="flex items-center space-x-4 xs:space-x-6">
                           <RadioButton
                             label={t('arabic')}
                             checked={fontLanguage === 'arabic'}
@@ -808,8 +807,8 @@ const CardSelector = () => {
                         </div>
                       </div>
                       <div>
-                        <label className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                          <Type size={18} className="mr-2" />
+                        <label className="flex items-center text-xs xs:text-sm font-medium text-foreground mb-1 xs:mb-2">
+                          <Type size={14} className="mr-2" />
                           {t('guide_font')}
                         </label>
                         <Select
@@ -834,7 +833,7 @@ const CardSelector = () => {
                         />
                       </div>
                       <div>
-                        <label className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <label className="flex items-center text-xs xs:text-sm font-medium text-foreground mb-1 xs:mb-2">
                           {t('guide_font_style')}
                         </label>
                         <Select
@@ -852,10 +851,10 @@ const CardSelector = () => {
                         />
                       </div>
                       <div>
-                        <label className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <label className="flex items-center text-xs xs:text-sm font-medium text-foreground mb-1 xs:mb-2">
                           {t('guide_font_size')}
                         </label>
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2 xs:gap-3">
                           <input
                             type="range"
                             min="20"
@@ -869,16 +868,16 @@ const CardSelector = () => {
                             className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg cursor-pointer accent-blue-600"
                             aria-label={t('guide_font_size')}
                           />
-                          <span className="text-sm font-mono w-14 text-right text-gray-600 dark:text-gray-400">
+                          <span className="text-xs xs:text-sm font-mono w-12 xs:w-14 text-right text-gray-600 dark:text-gray-400">
                             {fontSize}px
                           </span>
                         </div>
                       </div>
                       <div>
-                        <label className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <label className="flex items-center text-xs xs:text-sm font-medium text-foreground mb-1 xs:mb-2">
                           {t('text_shadow')}
                         </label>
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2 xs:gap-3">
                           <input
                             type="range"
                             min="0"
@@ -892,43 +891,43 @@ const CardSelector = () => {
                             className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg cursor-pointer accent-blue-600"
                             aria-label={t('text_shadow')}
                           />
-                          <span className="text-sm font-mono w-14 text-right text-gray-600 dark:text-gray-400">
+                          <span className="text-xs xs:text-sm font-mono w-12 xs:w-14 text-right text-gray-600 dark:text-gray-400">
                             {textShadow}px
                           </span>
                         </div>
                       </div>
                     </div>
-                    <div className="flex flex-wrap gap-4">
+                    <div className="flex flex-wrap gap-2 xs:gap-4">
                       {Object.keys(presets).map((preset) => (
                         <button
                           key={preset}
                           onClick={() => applyPreset(preset)}
-                          className="px-4 py-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-all cursor-pointer"
+                          className="px-2.5 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-all cursor-pointer text-xs sm:text-sm"
                         >
                           {t(preset)}
                         </button>
                       ))}
                     </div>
-                    <div className="flex gap-4">
+                    <div className="flex gap-2 xs:gap-4">
                       <button
                         onClick={undo}
                         disabled={history.length === 0}
                         className={
                           history.length === 0
-                            ? 'flex items-center px-4 py-2 rounded-lg transition-all bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
-                            : 'flex items-center px-4 py-2 rounded-lg transition-all bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-200 hover:bg-yellow-200 dark:hover:bg-yellow-800 cursor-pointer'
+                            ? 'flex items-center px-2.5 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 rounded-lg transition-all bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed text-xs sm:text-sm'
+                            : 'flex items-center px-2.5 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 rounded-lg transition-all bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-200 hover:bg-yellow-200 dark:hover:bg-yellow-800 cursor-pointer text-xs sm:text-sm'
                         }
                         aria-label={t('undo')}
                       >
-                        <Undo2 size={18} className="mr-2" />
+                        <Undo2 size={14} className="mr-2" />
                         {t('undo')}
                       </button>
                       <button
                         onClick={reset}
-                        className="flex items-center px-4 py-2 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 rounded-lg hover:bg-red-200 dark:hover:bg-red-800 transition-all cursor-pointer"
+                        className="flex items-center px-2.5 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 rounded-lg hover:bg-red-200 dark:hover:bg-red-800 transition-all cursor-pointer text-xs sm:text-sm"
                         aria-label={t('reset')}
                       >
-                        <RefreshCw size={18} className="mr-2" />
+                        <RefreshCw size={14} className="mr-2" />
                         {t('reset')}
                       </button>
                     </div>
@@ -940,31 +939,31 @@ const CardSelector = () => {
 
           {/* Preview and Actions */}
           <div className="flex flex-col">
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 flex-1">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="flex items-center text-2xl font-semibold text-gray-800 dark:text-white">
-                  <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white mr-3">
+            <div className="bg-gradient-card rounded-xl shadow-card p-4 xs:p-6 sm:p-8 flex-1">
+              <div className="flex items-center justify-between mb-4 xs:mb-6">
+                <h2 className="flex items-center text-lg xs:text-xl sm:text-2xl font-semibold text-foreground">
+                  <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white mr-2 xs:mr-3">
                     3
                   </span>
                   {t('preview')}
                 </h2>
                 {enableCustomization && (
-                  <div className="flex items-center text-sm text-blue-600 dark:text-blue-400">
-                    <Wand2 size={18} className="mr-2" />
+                  <div className="flex items-center text-xs xs:text-sm text-blue-600 dark:text-blue-400">
+                    <Wand2 size={14} className="mr-2" />
                     {t('position_tip')}
                   </div>
                 )}
               </div>
 
               <div
-                className="relative w-full flex items-center justify-center"
+                className="relative w-full max-w-full flex items-center justify-center"
                 aria-busy={isLoading}
               >
                 {isLoading ? (
-                  <div className="w-full aspect-[4/3] rounded-xl flex items-center justify-center bg-gray-100 dark:bg-gray-700">
+                  <div className="w-full max-h-[360px] xs:max-h-[400px] sm:max-h-[480px] rounded-xl flex items-center justify-center bg-gray-100 dark:bg-gray-700">
                     <div className="flex flex-col items-center">
-                      <Loader2 className="w-10 h-10 text-blue-600 animate-spin mb-3" />
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                      <Loader2 className="w-8 h-8 xs:w-10 xs:h-10 text-blue-600 animate-spin mb-2 xs:mb-3" />
+                      <p className="text-xs xs:text-sm text-gray-500 dark:text-gray-400">
                         {t('loading_fonts')}
                       </p>
                     </div>
@@ -979,8 +978,8 @@ const CardSelector = () => {
                       ref={previewRef}
                       className={
                         selectedCardType === 'whatsapp'
-                          ? 'relative rounded-xl shadow-xl bg-center bg-no-repeat bg-contain aspect-[9/16] w-full max-w-xs overflow-hidden cursor-pointer transition-transform duration-200'
-                          : 'relative rounded-xl shadow-xl bg-center bg-no-repeat bg-contain aspect-[16/9] w-full max-w-lg overflow-hidden cursor-pointer transition-transform duration-200'
+                          ? 'relative rounded-xl shadow-xl bg-center bg-no-repeat bg-contain aspect-[9/16] w-full max-w-[280px] xs:max-w-[320px] sm:max-w-[360px] max-h-[360px] xs:max-h-[400px] sm:max-h-[480px] overflow-hidden cursor-pointer transition-transform duration-200'
+                          : 'relative rounded-xl shadow-xl bg-center bg-no-repeat bg-contain aspect-[16/9] w-full max-w-[400px] xs:max-w-[480px] sm:max-w-[560px] max-h-[360px] xs:max-h-[400px] sm:max-h-[480px] overflow-hidden cursor-pointer transition-transform duration-200'
                       }
                       onClick={handlePreviewClick}
                       onMouseDown={handleMouseDown}
@@ -1011,8 +1010,8 @@ const CardSelector = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="w-full aspect-[4/3] rounded-xl flex items-center justify-center bg-gray-100 dark:bg-gray-700">
-                    <p className="text-gray-500 dark:text-gray-400">
+                  <div className="w-full max-h-[360px] xs:max-h-[400px] sm:max-h-[480px] rounded-xl flex items-center justify-center bg-gray-100 dark:bg-gray-700">
+                    <p className="text-xs xs:text-sm text-gray-500 dark:text-gray-400">
                       {t('select_card')}
                     </p>
                   </div>
@@ -1020,43 +1019,43 @@ const CardSelector = () => {
               </div>
 
               {enableCustomization && selectedImage && (
-                <div className="flex items-center justify-center mt-4">
+                <div className="flex items-center justify-center mt-3 xs:mt-4">
                   <button
                     onClick={() =>
                       setZoomLevel((prev) => Math.min(prev + 0.1, 2))
                     }
-                    className="p-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-all cursor-pointer"
+                    className="p-1 xs:p-1.5 sm:p-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-all cursor-pointer"
                     aria-label={t('zoom_in')}
                   >
-                    <ZoomIn size={18} />
+                    <ZoomIn size={14} />
                   </button>
                   <button
                     onClick={() =>
                       setZoomLevel((prev) => Math.max(prev - 0.1, 0.5))
                     }
-                    className="p-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-all cursor-pointer ml-2"
+                    className="p-1 xs:p-1.5 sm:p-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-all cursor-pointer ms-2"
                     aria-label={t('zoom_out')}
                   >
-                    <ZoomOut size={18} />
+                    <ZoomOut size={14} />
                   </button>
                 </div>
               )}
 
-              <div className="flex flex-wrap items-center justify-center gap-4 mt-8">
+              <div className="flex flex-wrap items-center justify-center gap-3 xs:gap-4 sm:gap-6 mt-6 xs:mt-8">
                 <button
                   onClick={downloadCard}
                   disabled={!selectedImage || actionLoading}
                   className={
                     !selectedImage || actionLoading
-                      ? 'flex items-center justify-center px-6 py-3 rounded-xl font-medium text-white transition-all duration-200 bg-gray-300 dark:bg-gray-600 cursor-not-allowed'
-                      : 'flex items-center justify-center px-6 py-3 rounded-xl font-medium text-white transition-all duration-200 bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer'
+                      ? 'flex items-center justify-center px-3 xs:px-4 sm:px-6 py-1.5 xs:py-2 sm:py-3 rounded-xl font-medium text-white transition-all duration-200 bg-gray-300 dark:bg-gray-600 cursor-not-allowed text-xs xs:text-sm'
+                      : 'flex items-center justify-center px-3 xs:px-4 sm:px-6 py-1.5 xs:py-2 sm:py-3 rounded-xl font-medium text-white transition-all duration-200 bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer text-xs xs:text-sm'
                   }
                   aria-label={t('save_card')}
                 >
                   {actionLoading ? (
-                    <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                    <Loader2 className="w-4 xs:w-5 h-4 xs:h-5 animate-spin mr-2" />
                   ) : (
-                    <Download className="w-5 h-5 mr-2" />
+                    <Download className="w-4 xs:w-5 h-4 xs:h-5 mr-2" />
                   )}
                   {t('save_card')}
                 </button>
@@ -1065,15 +1064,15 @@ const CardSelector = () => {
                   disabled={!selectedImage || actionLoading}
                   className={
                     !selectedImage || actionLoading
-                      ? 'flex items-center justify-center px-6 py-3 rounded-xl font-medium text-white transition-all duration-200 bg-gray-300 dark:bg-gray-600 cursor-not-allowed'
-                      : 'flex items-center justify-center px-6 py-3 rounded-xl font-medium text-white transition-all duration-200 bg-green-600 hover:bg-green-700 shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer'
+                      ? 'flex items-center justify-center px-3 xs:px-4 sm:px-6 py-1.5 xs:py-2 sm:py-3 rounded-xl font-medium text-white transition-all duration-200 bg-gray-300 dark:bg-gray-600 cursor-not-allowed text-xs xs:text-sm'
+                      : 'flex items-center justify-center px-3 xs:px-4 sm:px-6 py-1.5 xs:py-2 sm:py-3 rounded-xl font-medium text-white transition-all duration-200 bg-green-600 hover:bg-green-700 shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer text-xs xs:text-sm'
                   }
                   aria-label={t('share_card')}
                 >
                   {actionLoading ? (
-                    <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                    <Loader2 className="w-4 xs:w-5 h-4 xs:h-5 animate-spin mr-2" />
                   ) : (
-                    <Share2 className="w-5 h-5 mr-2" />
+                    <Share2 className="w-4 xs:w-5 h-4 xs:h-5 mr-2" />
                   )}
                   {t('share_card')}
                 </button>
@@ -1089,11 +1088,11 @@ const CardSelector = () => {
 // Reusable Components
 const CardSection = ({ title, cards, selectedImage, selectCard, type }) => (
   <div className="w-full flex justify-center">
-    <div className="w-full max-w-5xl">
-      <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-6">
+    <div className="w-full max-w-md xs:max-w-lg sm:max-w-4xl">
+      <h3 className="text-lg xs:text-xl sm:text-2xl font-semibold text-foreground mb-4 xs:mb-6">
         {title}
       </h3>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center mx-auto">
+      <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 xs:gap-4 sm:gap-6 justify-items-center mx-auto">
         {cards.map((card, index) => (
           <div
             key={`${type}-${index}`}
@@ -1101,10 +1100,10 @@ const CardSection = ({ title, cards, selectedImage, selectCard, type }) => (
               selectedImage?.src === card.src
                 ? `aspect-[${
                     type === 'whatsapp' ? '9/16' : '16/9'
-                  }] rounded-lg overflow-hidden shadow-lg border-4 transition-transform duration-300 cursor-pointer hover:scale-105 hover:shadow-2xl border-blue-600 ring-2 ring-blue-200/50`
+                  }] rounded-lg overflow-hidden shadow-lg border-4 transition-transform duration-300 cursor-pointer hover:scale-105 hover:shadow-2xl border-blue-600 ring-2 ring-blue-200/50 max-w-[120px] xs:max-w-[100px] sm:max-w-[160px]`
                 : `aspect-[${
                     type === 'whatsapp' ? '9/16' : '16/9'
-                  }] rounded-lg overflow-hidden shadow-lg border-2 transition-transform duration-300 cursor-pointer hover:scale-105 hover:shadow-2xl border-gray-200 dark:border-gray-600`
+                  }] rounded-lg overflow-hidden shadow-lg border-2 transition-transform duration-300 cursor-pointer hover:scale-105 hover:shadow-2xl border-gray-200 dark:border-gray-600 max-w-[120px] xs:max-w-[100px] sm:max-w-[160px]`
             }
             onClick={() => selectCard(card)}
             onKeyDown={(e) => e.key === 'Enter' && selectCard(card)}
@@ -1136,15 +1135,13 @@ const RadioButton = ({ label, checked, onChange }) => (
     <div
       className={
         checked
-          ? 'w-5 h-5 rounded-full border flex items-center justify-center border-blue-600 bg-blue-600'
-          : 'w-5 h-5 rounded-full border flex items-center justify-center border-gray-300 dark:border-gray-600'
+          ? 'w-4 xs:w-5 h-4 xs:h-5 rounded-full border flex items-center justify-center border-blue-600 bg-blue-600'
+          : 'w-4 xs:w-5 h-4 xs:h-5 rounded-full border flex items-center justify-center border-gray-300 dark:border-gray-600'
       }
     >
-      {checked && <Check size={12} className="text-white" />}
+      {checked && <Check size={10} className="text-white" />}
     </div>
-    <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
-      {label}
-    </span>
+    <span className="ms-2 text-xs xs:text-sm text-foreground">{label}</span>
   </label>
 );
 
@@ -1153,7 +1150,7 @@ const Select = ({ value, onChange, options, ariaLabel }) => (
     <select
       value={value}
       onChange={onChange}
-      className="appearance-none w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-800 dark:text-white cursor-pointer"
+      className="appearance-none w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-3 xs:px-4 py-2 xs:py-2.5 sm:py-3 pr-8 xs:pr-10 focus:outline-none focus:ring-2 focus:ring-blue-600 text-xs xs:text-sm text-foreground cursor-pointer"
       aria-label={ariaLabel}
     >
       {options.map((option) => (
@@ -1162,8 +1159,8 @@ const Select = ({ value, onChange, options, ariaLabel }) => (
         </option>
       ))}
     </select>
-    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-      <ChevronsUpDown size={18} className="text-gray-500" />
+    <div className="absolute right-3 xs:right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+      <ChevronsUpDown size={14} className="text-gray-500" />
     </div>
   </div>
 );
