@@ -49,7 +49,9 @@ const resources = {
       retry: 'Retry',
       image_load_error: 'Failed to load image. Please select another card.',
       download_error: 'Failed to download card. Please try again.',
-      share_error: 'Failed to share card. Please try again.'
+      share_error: 'Failed to share card. Please try again.',
+      cards_downloaded: "{count} cards downloaded so far",
+      download_count_error: "Failed to fetch download count. Please try again later."
     },
   },
   ar: {
@@ -98,7 +100,9 @@ const resources = {
       retry: 'إعادة المحاولة',
       image_load_error: 'فشل تحميل الصورة. يرجى اختيار بطاقة أخرى.',
       download_error: 'فشل تنزيل البطاقة. يرجى المحاولة مرة أخرى.',
-      share_error: 'فشل مشاركة البطاقة. يرجى المحاولة مرة أخرى.'
+      share_error: 'فشل مشاركة البطاقة. يرجى المحاولة مرة أخرى.',
+      cards_downloaded: "تم تنزيل {count} بطاقة حتى الآن",
+      download_count_error: "فشل في جلب عدد التنزيلات. يرجى المحاولة مرة أخرى لاحقًا."
     },
   },
 };

@@ -1,37 +1,31 @@
 // src/data.js
 export const imageCategories = {
   RHC: [
-    { src: '/RHC/rhc1.jpg', type: 'whatsapp' },
-    { src: '/RHC/rhc2.jpg', type: 'linkedin' },
-    { src: '/RHC/rhc3.jpg', type: 'whatsapp' },
-    { src: '/RHC/rhc4.jpg', type: 'linkedin' },
+    { src: '/RHC/rhc-post-1.png', type: 'linkedin' },
+    { src: '/RHC/rhc-story-1.jpg', type: 'whatsapp' },
   ],
   FHC: [
-    { src: '/FHC/fhc1.jpg', type: 'whatsapp' },
-    { src: '/FHC/fhc2.jpg', type: 'linkedin' },
+    { src: '/FHC/fhc-post-1.png', type: 'linkedin' },
+    { src: '/FHC/fhc-story-1.jpg', type: 'whatsapp' },
+    { src: '/FHC/fhc-story-2.jpg', type: 'whatsapp' },
   ],
   Green: [
-    { src: '/GREEN/green1.jpg', type: 'whatsapp' },
-    { src: '/GREEN/green2.jpg', type: 'linkedin' },
-    { src: '/GREEN/green3.jpg', type: 'whatsapp' },
-    { src: '/GREEN/green4.jpg', type: 'linkedin' },
+    { src: '/GREEN/reda-green-post-1.png', type: 'linkedin' },
+    { src: '/GREEN/reda-green-story-1.jpg', type: 'whatsapp' },
+    { src: '/GREEN/reda-green-story-2.jpg', type: 'whatsapp' },
   ],
   Process: [
-    { src: '/PROCESS/process1.jpg', type: 'whatsapp' },
-    { src: '/PROCESS/process2.jpg', type: 'linkedin' },
+    { src: '/PROCESS/process-post-1.png', type: 'linkedin' },
+    { src: '/PROCESS/process-story-1.jpg', type: 'whatsapp' },
+    { src: '/PROCESS/process-story-2.jpg', type: 'whatsapp' },
   ],
   Safe: [
-    { src: '/SAFE/safe1.jpg', type: 'whatsapp' },
-    { src: '/SAFE/safe4.jpg', type: 'linkedin' },
-    { src: '/SAFE/safe3.jpg', type: 'whatsapp' },
-    { src: '/SAFE/safe6.jpg', type: 'linkedin' },
-    { src: '/SAFE/safe2.jpg', type: 'whatsapp' },
-    { src: '/SAFE/safe5.jpg', type: 'linkedin' },
+    { src: '/SAFE/safe-post-1.png', type: 'linkedin' },
+    { src: '/SAFE/safe-story-1.jpg', type: 'whatsapp' },
+    { src: '/SAFE/safe-story-2.jpg', type: 'whatsapp' },
   ],
   Verdifor: [
-    { src: '/VERDIFOR/Verdifor3.jpg', type: 'whatsapp' },
-    { src: '/VERDIFOR/Verdifor1.jpg', type: 'linkedin' },
-    { src: '/VERDIFOR/Verdifor2.jpg', type: 'whatsapp' },
-    { src: '/VERDIFOR/Verdifor4.jpg', type: 'linkedin' },
+    { src: '/VERDIFOR/Verdifor-post-1.png', type: 'linkedin' },
+    { src: '/VERDIFOR/Verdifor-story-1.jpg', type: 'whatsapp' },
   ],
 };
