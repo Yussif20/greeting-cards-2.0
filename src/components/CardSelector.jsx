@@ -930,16 +930,16 @@ const CardSelector = () => {
 
           {/* Preview and Actions */}
           <div className="flex flex-col">
-            <div className="bg-gradient-card rounded-xl shadow-card p-6 flex-1">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="flex items-center text-2xl font-semibold text-foreground">
-                  <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white mr-3">
+            <div className="bg-gradient-card rounded-xl shadow-card p-4 sm:p-6 px-0 sm:px-4 flex-1">
+              <div className="flex items-center justify-between mb-4 sm:mb-6">
+                <h2 className="flex items-center text-xl sm:text-2xl font-semibold text-foreground">
+                  <span className="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-600 text-white mr-2 sm:mr-3 text-sm sm:text-base">
                     3
                   </span>
                   {t('preview')}
                 </h2>
-                <div className="flex items-center text-sm text-blue-600 dark:text-blue-400">
-                  <Wand2 size={16} className="mr-2" />
+                <div className="flex items-center text-xs sm:text-sm text-blue-600 dark:text-blue-400">
+                  <Wand2 size={16} className="mr-1 sm:mr-2" />
                   {t('position_tip')}
                 </div>
               </div>
@@ -950,8 +950,8 @@ const CardSelector = () => {
                 {isLoading ? (
                   <div className="w-full max-h-[480px] rounded-xl flex items-center justify-center bg-gray-100 dark:bg-gray-700">
                     <div className="flex flex-col items-center">
-                      <Loader2 className="w-10 h-10 text-blue-600 animate-spin mb-3" />
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                      <Loader2 className="w-8 sm:w-10 h-8 sm:h-10 text-blue-600 animate-spin mb-3" />
+                      <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                         {t('loading_fonts')}
                       </p>
                     </div>
@@ -964,11 +964,14 @@ const CardSelector = () => {
                     <div
                       id="card-preview"
                       ref={previewRef}
-                      className={
-                        selectedCardType === 'whatsapp'
-                          ? 'relative rounded-xl shadow-xl bg-center bg-no-repeat bg-contain aspect-[9/16] w-full max-w-[360px] max-h-[640px] overflow-hidden cursor-pointer transition-transform duration-200'
-                          : 'relative rounded-xl shadow-xl bg-center bg-no-repeat bg-contain aspect-[16/9] w-full max-w-[720px] max-h-[405px] overflow-hidden cursor-pointer transition-transform duration-200'
-                      }
+                      className={`
+              relative rounded-xl shadow-xl bg-center bg-no-repeat bg-contain overflow-hidden cursor-pointer transition-transform duration-200 h-auto
+              ${
+                selectedCardType === 'whatsapp'
+                  ? 'aspect-[9/16] w-full max-w-[320px] sm:max-w-[360px] max-h-[568px] sm:max-h-[640px]'
+                  : 'aspect-[16/15] w-full max-h-[540px] sm:max-h-[720px] lg:max-h-[810px]'
+              }
+            `}
                       onClick={handlePreviewClick}
                       onMouseDown={handleMouseDown}
                       onMouseMove={handleMouseMove}
@@ -983,7 +986,7 @@ const CardSelector = () => {
                       <span
                         id="name-preview"
                         ref={namePreviewRef}
-                        className="absolute cursor-move select-none"
+                        className="absolute cursor-move select-none text-base sm:text-lg lg:text-xl text-white drop-shadow-md"
                       >
                         {name || t('text_preview')}
                       </span>
@@ -991,14 +994,14 @@ const CardSelector = () => {
                   </div>
                 ) : (
                   <div className="w-full max-h-[480px] rounded-xl flex items-center justify-center bg-gray-100 dark:bg-gray-700">
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                    <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                       {t('select_card')}
                     </p>
                   </div>
                 )}
               </div>
               {selectedImage && (
-                <div className="flex items-center justify-center mt-4">
+                <div className="flex items-center justify-center mt-4 gap-2">
                   <button
                     onClick={() =>
                       setZoomLevel((prev) => Math.min(prev + 0.1, 2))
@@ -1012,28 +1015,28 @@ const CardSelector = () => {
                     onClick={() =>
                       setZoomLevel((prev) => Math.max(prev - 0.1, 0.5))
                     }
-                    className="p-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-all ml-2"
+                    className="p-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-all"
                     aria-label={t('zoom_out')}
                   >
                     <ZoomOut size={16} />
                   </button>
                 </div>
               )}
-              <div className="flex flex-wrap items-center justify-center gap-6 mt-8">
+              <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-4 sm:mt-8">
                 <button
                   onClick={downloadCard}
                   disabled={!selectedImage || actionLoading}
                   className={
                     !selectedImage || actionLoading
-                      ? 'flex items-center justify-center px-6 py-3 rounded-xl font-medium text-white bg-gray-300 dark:bg-gray-600 cursor-not-allowed text-sm'
-                      : 'flex items-center justify-center px-6 py-3 rounded-xl font-medium text-white bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all text-sm'
+                      ? 'flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-medium text-white bg-gray-300 dark:bg-gray-600 cursor-not-allowed text-xs sm:text-sm'
+                      : 'flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-medium text-white bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all text-xs sm:text-sm'
                   }
                   aria-label={t('save_card')}
                 >
                   {actionLoading ? (
-                    <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                    <Loader2 className="w-4 sm:w-5 h-4 sm:h-5 animate-spin mr-2" />
                   ) : (
-                    <Download className="w-5 h-5 mr-2" />
+                    <Download className="w-4 sm:w-5 h-4 sm:h-5 mr-2" />
                   )}
                   {t('save_card')}
                 </button>
@@ -1042,15 +1045,15 @@ const CardSelector = () => {
                   disabled={!selectedImage || actionLoading}
                   className={
                     !selectedImage || actionLoading
-                      ? 'flex items-center justify-center px-6 py-3 rounded-xl font-medium text-white bg-gray-300 dark:bg-gray-600 cursor-not-allowed text-sm'
-                      : 'flex items-center justify-center px-6 py-3 rounded-xl font-medium text-white bg-green-700 hover:bg-green-800 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all text-sm'
+                      ? 'flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-medium text-white bg-gray-300 dark:bg-gray-600 cursor-not-allowed text-xs sm:text-sm'
+                      : 'flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-medium text-white bg-green-700 hover:bg-green-800 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all text-xs sm:text-sm'
                   }
                   aria-label={t('share_card')}
                 >
                   {actionLoading ? (
-                    <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                    <Loader2 className="w-4 sm:w-5 h-4 sm:h-5 animate-spin mr-2" />
                   ) : (
-                    <Share2 className="w-5 h-5 mr-2" />
+                    <Share2 className="w-4 sm:w-5 h-4 sm:h-5 mr-2" />
                   )}
                   {t('share_card')}
                 </button>
