@@ -6,13 +6,16 @@ const resources = {
   en: {
     translation: {
       // Common
-      visit_website: 'Visit Our Website',
       copyright: '© 2025 All rights reserved.',
       // Home
       eid_greeting: 'Blessed Eid al-Adha',
       eid_message: 'Wishing you a joyful and peaceful Eid with your family and loved ones',
       company_message: 'At Reda Hazard Control, we celebrate this Eid with you by creating personalized greeting cards to share the joy',
-      create_card: 'Create Your Card Now',
+      "greeting": "Blessed Eid al-Adha",
+      "wishes": "Wishing you a joyful and peaceful Eid with your family and loved ones",
+      "description": "At Reda Hazard Control, we celebrate this Eid with you by creating personalized greeting cards to share the joy",
+      "create_card": "Create Your Card Now",
+      "visit_website": "Visit Website",
       // CardSelector
       select_card: 'Select Card',
       whatsapp_story: 'WhatsApp Story',
@@ -57,13 +60,16 @@ const resources = {
   ar: {
     translation: {
       // Common
-      visit_website: 'زوروا موقعنا الإلكتروني',
       copyright: '© 2025 جميع الحقوق محفوظة',
       // Home
       eid_greeting: 'عيد أضحى مبارك',
       eid_message: 'نتمنى لكم عيداً مليئاً بالفرح والسلام مع عائلتكم وأحبائكم',
       company_message: 'في رضا للسيطرة على المخاطر، نحتفل معكم بهذا العيد بإنشاء بطاقات تهنئة مخصصة لمشاركة الفرحة',
-      create_card: 'أنشئ بطاقتك الآن',
+      "greeting": "عيد أضحى مبارك",
+      "wishes": "نتمنى لكم عيداً مليئاً بالفرح والسلام مع عائلتكم وأحبائكم",
+      "description": "في رضا للسيطرة على المخاطر، نحتفل معكم بهذا العيد بإنشاء بطاقات تهنئة مخصصة لمشاركة الفرحة",
+      "create_card": "أنشئ بطاقتك الآن",
+      "visit_website": "زيارة الموقع",
       // CardSelector
       select_card: 'اختر بطاقة',
       whatsapp_story: 'قصة واتساب',

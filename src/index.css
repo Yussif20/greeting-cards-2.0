@@ -2,7 +2,7 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Custom variables for light mode */
+/* CSS Variables */
 :root {
   --background: #e5e7eb; /* gray-200 */
   --foreground: #1f2937; /* gray-800 */
@@ -12,7 +12,6 @@
   --border: #d1d5db; /* gray-300 */
 }
 
-/* Dark mode variables */
 .dark {
   --background: #1f2937; /* gray-800 */
   --foreground: #e5e7eb; /* gray-200 */
@@ -28,9 +27,10 @@ body {
 }
 
 a {
-  cursor: pointer;
+  @apply cursor-pointer;
 }
-/* WebKit Browsers (Chrome, Safari, Edge) */
+
+/* Scrollbar Styles */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -41,43 +41,34 @@ a {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(100, 116, 139, 0.4); /* slate-500 with transparency */
+  background-color: rgba(100, 116, 139, 0.5); /* slate-500 */
   border-radius: 10px;
   transition: background-color 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(100, 116, 139, 0.6);
+  background-color: rgba(100, 116, 139, 0.7);
 }
 
-/* Dark mode scrollbar (WebKit) */
-html.dark ::-webkit-scrollbar-thumb {
-  background-color: rgba(203, 213, 225, 0.3); /* slate-200 */
+.dark ::-webkit-scrollbar-thumb {
+  background-color: rgba(203, 213, 225, 0.4); /* slate-200 */
 }
 
-html.dark ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(203, 213, 225, 0.5);
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(203, 213, 225, 0.6);
 }
 
-/* Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(100, 116, 139, 0.4) transparent;
+  scrollbar-color: rgba(100, 116, 139, 0.5) transparent;
 }
 
-html.dark * {
-  scrollbar-color: rgba(203, 213, 225, 0.3) transparent;
+.dark * {
+  scrollbar-color: rgba(203, 213, 225, 0.4) transparent;
 }
-/* Custom utilities */
+
+/* Custom Utilities */
 @layer utilities {
-  .bg-background {
-    background-color: var(--background);
-  }
-
-  .text-foreground {
-    color: var(--foreground);
-  }
-
   .bg-card {
     background-color: var(--card-bg);
   }
@@ -100,12 +91,12 @@ html.dark * {
   }
 
   .scrollbar-hidden {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 
   .scrollbar-hidden::-webkit-scrollbar {
-    display: none; /* Chrome, Safari */
+    display: none;
   }
 
   .transition-all {
@@ -113,16 +104,14 @@ html.dark * {
   }
 }
 
-/* RTL support */
+/* RTL Support */
 [dir='rtl'] {
   .ms-2 {
-    margin-inline-start: 0.5rem;
-    margin-inline-end: unset;
+    margin-inline: 0.5rem;
   }
 
   .me-2 {
-    margin-inline-end: 0.5rem;
-    margin-inline-start: unset;
+    margin-inline: 0.5rem;
   }
 
   .transform.rotate-180 {
@@ -162,13 +151,11 @@ html.dark * {
 }
 
 .animate-fade-in {
-  animation: fade-in 0.5s ease-out;
-  will-change: opacity;
+  animation: fade-in 0.5s ease-out forwards;
 }
 
 .animate-slide-up {
-  animation: slide-up 0.5s ease-out;
-  will-change: transform, opacity;
+  animation: slide-up 0.5s ease-out forwards;
 }
 
 .animate-slide-up.delay-100 {
@@ -185,5 +172,4 @@ html.dark * {
 
 .animate-pulse {
   animation: pulse 8s infinite ease-in-out;
-  will-change: opacity;
 }
