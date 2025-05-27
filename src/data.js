@@ -36,9 +36,9 @@ export const imageCategories = {
     { src: '/SAFE/safe-story-3.jpg', type: 'whatsapp' },
   ],
   Verdifor: [
-    { src: '/VERDIFOR/Verdifor-post-1.png', type: 'linkedin' },
-    { src: '/VERDIFOR/Verdifor-post-2.jpg', type: 'linkedin' },
-    { src: '/VERDIFOR/Verdifor-story-1.jpg', type: 'whatsapp' },
-    { src: '/VERDIFOR/Verdifor-story-2.jpg', type: 'whatsapp' },
+    { src: '/VERDIFOR/verdifor-post-1.png', type: 'linkedin' },
+    { src: '/VERDIFOR/verdifor-post-2.jpg', type: 'linkedin' },
+    { src: '/VERDIFOR/verdifor-story-1.jpg', type: 'whatsapp' },
+    { src: '/VERDIFOR/verdifor-story-2.jpg', type: 'whatsapp' },
   ],
 };

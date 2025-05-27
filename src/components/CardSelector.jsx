@@ -670,24 +670,27 @@ const CardSelector = () => {
         )}
 
         {/* Card Selection Section */}
-        <section className="max-w-6xl mx-auto mb-12 animate-fade-in delay-100">
-          <h2 className="text-3xl lg:text-4xl font-extrabold text-foreground mb-8 flex items-center">
-            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white mr-4">
+        <section className="w-full max-w-7xl mx-auto mb-8 px-4 sm:px-6 lg:px-8 animate-fade-in delay-100 overflow-x-hidden">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-foreground mb-6 flex items-center">
+            <span className="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-600 text-white mr-3 sm:mr-4 text-sm sm:text-base">
               1
             </span>
             {t('select_card')}
           </h2>
-          <div className="bg-gradient-card rounded-xl shadow-card p-6">
-            <div className="flex justify-start overflow-x-auto scrollbar-hidden snap-x snap-mandatory mb-8 gap-2 scroll-smooth">
+          <div className="bg-gradient-card rounded-xl shadow-card p-4 sm:p-6 w-full box-border">
+            <div className="flex justify-start overflow-x-auto scrollbar-hidden snap-x snap-mandatory mb-6 gap-1.5 sm:gap-3 scroll-smooth w-full">
               {Object.keys(imageCategories).map((category, index) => (
                 <button
                   key={category}
                   ref={(el) => (tabRefs.current[index] = el)}
-                  className={
-                    activeTab === category
-                      ? 'snap-center shrink-0 py-2 px-4 min-w-[100px] rounded-lg font-semibold text-sm bg-blue-600 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
-                      : 'snap-center shrink-0 py-2 px-4 min-w-[100px] rounded-lg font-semibold text-sm text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
-                  }
+                  className={`
+            snap-center shrink-0 py-2 px-2 sm:px-3 min-w-[60px] sm:min-w-[80px] rounded-lg font-semibold text-xs truncate
+            ${
+              activeTab === category
+                ? 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+                : 'text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+            }
+          `}
                   onClick={() => handleTabChange(category)}
                   onKeyDown={(e) =>
                     e.key === 'Enter' && handleTabChange(category)
@@ -701,7 +704,7 @@ const CardSelector = () => {
                 </button>
               ))}
             </div>
-            <div className="space-y-10">
+            <div className="space-y-8 sm:space-y-10">
               <CardSection
                 title={t('whatsapp_story')}
                 cards={whatsappCards}
@@ -721,7 +724,6 @@ const CardSelector = () => {
             </div>
           </div>
         </section>
-
         {/* Divider */}
         <div className="max-w-6xl mx-auto border-b border-gray-300 dark:border-gray-600 bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent h-px mb-12" />
 
@@ -1064,24 +1066,26 @@ const CardSelector = () => {
 // Reusable Components
 const CardSection = ({ title, cards, selectedImage, selectCard, type, id }) => (
   <div className="w-full" id={id}>
-    <h3 className="text-xl font-semibold text-foreground mb-6">{title}</h3>
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 justify-items-center mx-auto">
+    <h3 className="text-lg sm:text-xl font-semibold text-foreground mb-4">
+      {title}
+    </h3>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center mx-auto">
       {cards.map((card, index) => (
         <div
           key={`${type}-${index}`}
-          className={
-            selectedImage?.src === card.src
-              ? `relative rounded-lg overflow-hidden shadow-md border-2 border-blue-600 ring-2 ring-blue-200/50 transition-transform duration-300 hover:scale-105 hover:shadow-lg p-2 bg-white dark:bg-gray-800 ${
-                  type === 'whatsapp'
-                    ? 'aspect-[9/16] max-w-[180px]'
-                    : 'aspect-[16/9] max-w-[300px]'
-                }`
-              : `relative rounded-lg overflow-hidden shadow-md border-2 border-gray-200 dark:border-gray-600 transition-all p-2 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-105 hover:shadow-lg ${
-                  type === 'whatsapp'
-                    ? 'aspect-[9/16] max-w-[180px]'
-                    : 'aspect-[16/9] max-w-[300px]'
-                }`
-          }
+          className={`
+            relative rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-lg p-3 sm:p-4 bg-white dark:bg-gray-800 w-full
+            ${
+              selectedImage?.src === card.src
+                ? 'border-2 border-blue-600 ring-2 ring-blue-200/50'
+                : 'border-2 border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700'
+            }
+            ${
+              type === 'whatsapp'
+                ? 'h-64 sm:h-80 aspect-[9/16]'
+                : 'h-48 sm:h-64 aspect-[16/9]'
+            }
+          `}
           onClick={() => selectCard(card)}
           onKeyDown={(e) => e.key === 'Enter' && selectCard(card)}
           role="button"
