@@ -8,7 +8,7 @@ import React, {
 import { useTranslation } from 'react-i18next';
 import { imageCategories } from '../data';
 import debounce from 'lodash/debounce';
-import html2canvas from 'html2canvas';
+// import html2canvas from 'html2canvas';
 import {
   Download,
   Share2,
@@ -506,68 +506,68 @@ const CardSelector = () => {
   ]);
 
   // Share card
-  const shareCard = useCallback(async () => {
-    if (!selectedImage) return;
-    setActionLoading(true);
-    setError(null);
-    try {
-      const canvas = await html2canvas(previewRef.current, {
-        useCORS: true,
-        scale: 2,
-        logging: false,
-        onclone: (clonedDoc) => {
-          const clonedPreview = clonedDoc.querySelector('#card-preview');
-          const clonedText = clonedDoc.querySelector('#name-preview');
-          if (clonedPreview && clonedText) {
-            clonedPreview.style.width = `${selectedImage.width}px`;
-            clonedPreview.style.height = `${selectedImage.height}px`;
-            clonedText.style.left = `${namePosition.x}px`;
-            clonedText.style.top = `${namePosition.y}px`;
-            clonedText.style.fontSize = `${fontSize}px`;
-            clonedText.style.textShadow = `0 1px ${textShadow}px rgba(0,0,0,0.5)`;
-            clonedText.style.fontFamily = fontsLoaded
-              ? `"${font}", system-ui, sans-serif`
-              : 'system-ui, sans-serif';
-            clonedText.style.direction =
-              fontLanguage === 'arabic' ? 'rtl' : 'ltr';
-          }
-        },
-      });
-      const blob = await new Promise((resolve) =>
-        canvas.toBlob(resolve, 'image/png')
-      );
-      const file = new File([blob], 'company-greeting-card.png', {
-        type: 'image/png',
-      });
-      if (navigator.share) {
-        await navigator.share({
-          files: [file],
-          title: t('greeting_card'),
-          text: t('share_message'),
-        });
-      } else {
-        const dataUrl = canvas.toDataURL('image/png');
-        const link = document.createElement('a');
-        link.download = 'company-greeting-card.png';
-        link.href = dataUrl;
-        link.click();
-      }
-    } catch (err) {
-      console.error('Share failed:', err);
-      setError(t('share_error'));
-    } finally {
-      setActionLoading(false);
-    }
-  }, [
-    selectedImage,
-    namePosition,
-    fontSize,
-    textShadow,
-    font,
-    t,
-    fontsLoaded,
-    fontLanguage,
-  ]);
+  // const shareCard = useCallback(async () => {
+  //   if (!selectedImage) return;
+  //   setActionLoading(true);
+  //   setError(null);
+  //   try {
+  //     const canvas = await html2canvas(previewRef.current, {
+  //       useCORS: true,
+  //       scale: 2,
+  //       logging: false,
+  //       onclone: (clonedDoc) => {
+  //         const clonedPreview = clonedDoc.querySelector('#card-preview');
+  //         const clonedText = clonedDoc.querySelector('#name-preview');
+  //         if (clonedPreview && clonedText) {
+  //           clonedPreview.style.width = `${selectedImage.width}px`;
+  //           clonedPreview.style.height = `${selectedImage.height}px`;
+  //           clonedText.style.left = `${namePosition.x}px`;
+  //           clonedText.style.top = `${namePosition.y}px`;
+  //           clonedText.style.fontSize = `${fontSize}px`;
+  //           clonedText.style.textShadow = `0 1px ${textShadow}px rgba(0,0,0,0.5)`;
+  //           clonedText.style.fontFamily = fontsLoaded
+  //             ? `"${font}", system-ui, sans-serif`
+  //             : 'system-ui, sans-serif';
+  //           clonedText.style.direction =
+  //             fontLanguage === 'arabic' ? 'rtl' : 'ltr';
+  //         }
+  //       },
+  //     });
+  //     const blob = await new Promise((resolve) =>
+  //       canvas.toBlob(resolve, 'image/png')
+  //     );
+  //     const file = new File([blob], 'company-greeting-card.png', {
+  //       type: 'image/png',
+  //     });
+  //     if (navigator.share) {
+  //       await navigator.share({
+  //         files: [file],
+  //         title: t('greeting_card'),
+  //         text: t('share_message'),
+  //       });
+  //     } else {
+  //       const dataUrl = canvas.toDataURL('image/png');
+  //       const link = document.createElement('a');
+  //       link.download = 'company-greeting-card.png';
+  //       link.href = dataUrl;
+  //       link.click();
+  //     }
+  //   } catch (err) {
+  //     console.error('Share failed:', err);
+  //     setError(t('share_error'));
+  //   } finally {
+  //     setActionLoading(false);
+  //   }
+  // }, [
+  //   selectedImage,
+  //   namePosition,
+  //   fontSize,
+  //   textShadow,
+  //   font,
+  //   t,
+  //   fontsLoaded,
+  //   fontLanguage,
+  // ]);
 
   // Undo and reset
   const undo = useCallback(() => {
