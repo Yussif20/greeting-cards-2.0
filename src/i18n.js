@@ -62,7 +62,15 @@ const resources = {
       image_load_error: 'Failed to load image. Please select another card.',
       download_error: 'Failed to download card. Please try again.',
       share_error: 'Failed to share card. Please try again.',
-      retry: 'Retry'
+      retry: 'Retry',
+      "eid_al_adha_greeting": "Eid al-Adha Mubarak!",
+  "eid_wishes_message": "Spread joy this Eid with personalized greeting cards.",
+  "preview_description": "Preview of your custom Eid card.",
+  "cards_created": "Cards Created",
+  "happy_users": "Happy Users",
+  "support_available": "Support Available",
+  "testimonial_message": "Amazing app to create beautiful Eid cards!",
+  "testimonial_author": "Ahmed S."
     },
   },
   ar: {
@@ -124,7 +132,15 @@ const resources = {
       image_load_error: 'فشل تحميل الصورة. يرجى اختيار بطاقة أخرى.',
       download_error: 'فشل تنزيل البطاقة. يرجى المحاولة مرة أخرى.',
       share_error: 'فشل مشاركة البطاقة. يرجى المحاولة مرة أخرى.',
-      retry: 'إعادة المحاولة'
+      retry: 'إعادة المحاولة',
+      "eid_al_adha_greeting": "عيد الأضحى المبارك!",
+  "eid_wishes_message": "انشر الفرحة في عيد الأضحى ببطاقات تهنئة مخصصة.",
+  "preview_description": "معاينة بطاقة عيدك المخصصة.",
+  "cards_created": "بطاقات تم إنشاؤها",
+  "happy_users": "مستخدمون سعداء",
+  "support_available": "الدعم المتاح",
+  "testimonial_message": "تطبيق رائع لإنشاء بطاقات عيد جميلة!",
+  "testimonial_author": "أحمد س."
     },
   },
 };
