@@ -1044,7 +1044,7 @@ const CardSelector = () => {
                     )}
                     {t('save_card')}
                   </button>
-                  <button
+                  {/* <button
                     onClick={shareCard}
                     disabled={!selectedImage || actionLoading}
                     className={
@@ -1060,7 +1060,7 @@ const CardSelector = () => {
                       <Share2 className="w-4 sm:w-5 h-4 sm:h-5 mr-2" />
                     )}
                     {t('share_card')}
-                  </button>
+                  </button> */}
                 </div>
               </div>
             </div>
