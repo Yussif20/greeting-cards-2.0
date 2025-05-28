@@ -12,7 +12,7 @@ const Home = () => {
 
   return (
     <div
-      className="bg-gradient-to-br from-green-50 via-white to-green-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 min-h-screen flex flex-col items-center justify-center font-sans bg-[url('/path-to-islamic-pattern.png')] bg-repeat bg-[length:200px] dark:bg-[url('/path-to-dark-islamic-pattern.png')]"
+      className="bg-gradient-to-br from-green-50 via-white to-green-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 min-h-screen flex flex-col items-center justify-center font-sans bg-[url('/islamic-pattern-light.jpg')] dark:bg-[url('/islamic-pattern-dark.avif')]  bg-repeat bg-[length:200px]"
       dir={isArabic ? 'rtl' : 'ltr'}
       style={{ backgroundAttachment: 'fixed' }}
     >
@@ -37,7 +37,7 @@ const Home = () => {
                 <img
                   src={sampleCard}
                   alt={t('sample_card')}
-                  className="w-full h-auto rounded-lg object-cover aspect-[16/9]"
+                  className="w-full h-auto rounded-lg object-cover aspect-[16/16]"
                 />
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
                   {t('preview_description')}
@@ -46,7 +46,7 @@ const Home = () => {
             </div>
             <Link
               to="/cards"
-              className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-green-600 to-gold-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 animate-slide-up delay-200"
+              className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-green-600 to-yellow-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 animate-slide-up delay-200"
               aria-label={t('create_card')}
             >
               {t('create_card')}
