@@ -76,7 +76,7 @@ const resources = {
   ar: {
     translation: {
       // Common
-      copyright: '© 2025 رضا للسيطرة على المخاطر. جميع الحقوق محفوظة.',
+      copyright: '© 2025 Reda Hazard Control. جميع الحقوق محفوظة.',
       
       // Header
       home: 'الرئيسية',
@@ -133,7 +133,7 @@ const resources = {
       download_error: 'فشل تنزيل البطاقة. يرجى المحاولة مرة أخرى.',
       share_error: 'فشل مشاركة البطاقة. يرجى المحاولة مرة أخرى.',
       retry: 'إعادة المحاولة',
-      "eid_al_adha_greeting": "عيد أضحى المبارك!",
+      "eid_al_adha_greeting": "عيد أضحى مبارك!",
   "eid_wishes_message": "انشر الفرحة في عيد الأضحى ببطاقات تهنئة مخصصة.",
   "preview_description": "معاينة بطاقة عيدك المخصصة.",
   "cards_created": "بطاقات تم إنشاؤها",

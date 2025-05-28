@@ -37,7 +37,7 @@ const Home = () => {
                 <img
                   src={sampleCard}
                   alt={t('sample_card')}
-                  className="w-full h-auto rounded-lg object-cover aspect-[16/16]" // Corrected to 16:9 for LinkedIn post
+                  className="w-full h-auto rounded-lg object-cover aspect-[16/16npm ]" // Corrected to 16:9 for LinkedIn post
                 />
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
                   {t('preview_description')}
