@@ -4,7 +4,7 @@ import { ChevronRight, Gift, Users, Clock } from 'lucide-react';
 import { memo } from 'react';
 import { Logo } from './Header';
 import AnimatedSection from './AnimatedSection';
-import sampleCard from '../assets/rhc/rhc-post-2.jpg';
+import sampleCard from '/rhc/rhc-post-2.jpg';
 
 const Home = () => {
   const { t, i18n } = useTranslation();

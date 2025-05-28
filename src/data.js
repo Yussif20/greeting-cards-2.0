@@ -1,44 +1,44 @@
 //RHC images
-import rhcPost1 from './assets/rhc/rhc-post-1.png'; 
-import rhcPost2 from './assets/rhc/rhc-post-2.jpg';
-import rhcStory1 from './assets/rhc/rhc-story-1.jpg';
-import rhcStory2 from './assets/rhc/rhc-story-2.jpg';
-import rhcStory3 from './assets/rhc/rhc-story-3.jpg';
+import rhcPost1 from '/rhc/rhc-post-1.png'; 
+import rhcPost2 from '/rhc/rhc-post-2.jpg';
+import rhcStory1 from '/rhc/rhc-story-1.jpg';
+import rhcStory2 from '/rhc/rhc-story-2.jpg';
+import rhcStory3 from '/rhc/rhc-story-3.jpg';
 
 //FHC images
-import fhcPost1 from './assets/fhc/fhc-post-1.png';
-import fhcPost2 from './assets/fhc/fhc-post-2.jpg';
-import fhcStory1 from './assets/fhc/fhc-story-1.jpg';
-import fhcStory2 from './assets/fhc/fhc-story-2.jpg';
-import fhcStory3 from './assets/fhc/fhc-story-3.jpg';
+import fhcPost1 from '/fhc/fhc-post-1.png';
+import fhcPost2 from '/fhc/fhc-post-2.jpg';
+import fhcStory1 from '/fhc/fhc-story-1.jpg';
+import fhcStory2 from '/fhc/fhc-story-2.jpg';
+import fhcStory3 from '/fhc/fhc-story-3.jpg';
 
 //Green images
-import greenPost1 from './assets/green/reda-green-post-1.png';
-import greenPost2 from './assets/green/reda-green-post-2.jpg';
-import greenStory1 from './assets/green/reda-green-story-1.jpg';
-import greenStory2 from './assets/green/reda-green-story-2.jpg';
-import greenStory3 from './assets/green/reda-green-story-3.jpg';
+import greenPost1 from '/green/reda-green-post-1.png';
+import greenPost2 from '/green/reda-green-post-2.jpg';
+import greenStory1 from '/green/reda-green-story-1.jpg';
+import greenStory2 from '/green/reda-green-story-2.jpg';
+import greenStory3 from '/green/reda-green-story-3.jpg';
 
 //Process images
-import processPost1 from './assets/process/process-post-1.png';
-import processPost2 from './assets/process/process-post-2.jpg'; 
-import processStory1 from './assets/process/process-story-1.jpg';
-import processStory2 from './assets/process/process-story-2.jpg';
-import processStory3 from './assets/process/process-story-3.jpg';
+import processPost1 from '/process/process-post-1.png';
+import processPost2 from '/process/process-post-2.jpg'; 
+import processStory1 from '/process/process-story-1.jpg';
+import processStory2 from '/process/process-story-2.jpg';
+import processStory3 from '/process/process-story-3.jpg';
 
 //Safe images
-import safePost1 from './assets/safe/safe-post-1.png';
-import safePost2 from './assets/safe/safe-post-2.jpg';   
-import safeStory1 from './assets/safe/safe-story-1.jpg';
-import safeStory2 from './assets/safe/safe-story-2.jpg';
-import safeStory3 from './assets/safe/safe-story-3.jpg';
+import safePost1 from '/safe/safe-post-1.png';
+import safePost2 from '/safe/safe-post-2.jpg';   
+import safeStory1 from '/safe/safe-story-1.jpg';
+import safeStory2 from '/safe/safe-story-2.jpg';
+import safeStory3 from '/safe/safe-story-3.jpg';
 
 
 //Verdifor images
-import verdiforPost1 from './assets/verdifor/verdifor-post-1.png';
-import verdiforPost2 from './assets/verdifor/verdifor-post-2.jpg';
-import verdiforStory1 from './assets/verdifor/verdifor-story-1.jpg';
-import verdiforStory2 from './assets/verdifor/verdifor-story-2.jpg';
+import verdiforPost1 from '/verdifor/verdifor-post-1.png';
+import verdiforPost2 from '/verdifor/verdifor-post-2.jpg';
+import verdiforStory1 from '/verdifor/verdifor-story-1.jpg';
+import verdiforStory2 from '/verdifor/verdifor-story-2.jpg';
 
 
 // src/data.js
