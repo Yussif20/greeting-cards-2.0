@@ -23,6 +23,7 @@ import {
   ZoomIn,
   ZoomOut,
 } from 'lucide-react';
+import AnimatedSection from './AnimatedSection';
 
 const CardSelector = () => {
   const { t, i18n } = useTranslation();
@@ -670,20 +671,21 @@ const CardSelector = () => {
         )}
 
         {/* Card Selection Section */}
-        <section className="w-full max-w-7xl mx-auto mb-8 px-4 sm:px-6 lg:px-8 animate-fade-in delay-100 overflow-x-hidden">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-foreground mb-6 flex items-center">
-            <span className="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-600 text-white mr-3 sm:mr-4 text-sm sm:text-base">
-              1
-            </span>
-            {t('select_card')}
-          </h2>
-          <div className="bg-gradient-card rounded-xl shadow-card p-4 sm:p-6 w-full box-border">
-            <div className="flex justify-start overflow-x-auto scrollbar-hidden snap-x snap-mandatory mb-6 gap-1.5 sm:gap-3 scroll-smooth w-full">
-              {Object.keys(imageCategories).map((category, index) => (
-                <button
-                  key={category}
-                  ref={(el) => (tabRefs.current[index] = el)}
-                  className={`
+        <AnimatedSection>
+          <section className="w-full max-w-7xl mx-auto mb-8 px-4 sm:px-6 lg:px-8 animate-fade-in delay-100 overflow-x-hidden">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-foreground mb-6 flex items-center">
+              <span className="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-600 text-white mr-3 sm:mr-4 text-sm sm:text-base">
+                1
+              </span>
+              {t('select_card')}
+            </h2>
+            <div className="bg-gradient-card rounded-xl shadow-card p-4 sm:p-6 w-full box-border">
+              <div className="flex justify-start overflow-x-auto scrollbar-hidden snap-x snap-mandatory mb-6 gap-1.5 sm:gap-3 scroll-smooth w-full">
+                {Object.keys(imageCategories).map((category, index) => (
+                  <button
+                    key={category}
+                    ref={(el) => (tabRefs.current[index] = el)}
+                    className={`
             snap-center shrink-0 py-2 px-2 sm:px-3 min-w-[60px] sm:min-w-[80px] rounded-lg font-semibold text-xs truncate
             ${
               activeTab === category
@@ -691,280 +693,282 @@ const CardSelector = () => {
                 : 'text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
             }
           `}
-                  onClick={() => handleTabChange(category)}
-                  onKeyDown={(e) =>
-                    e.key === 'Enter' && handleTabChange(category)
-                  }
-                  role="tab"
-                  aria-controls={`card-section-${category}`}
-                  aria-selected={activeTab === category}
-                  tabIndex={0}
-                >
-                  {category}
-                </button>
-              ))}
+                    onClick={() => handleTabChange(category)}
+                    onKeyDown={(e) =>
+                      e.key === 'Enter' && handleTabChange(category)
+                    }
+                    role="tab"
+                    aria-controls={`card-section-${category}`}
+                    aria-selected={activeTab === category}
+                    tabIndex={0}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div>
+              <div className="space-y-8 sm:space-y-10">
+                <CardSection
+                  title={t('whatsapp_story')}
+                  cards={whatsappCards}
+                  selectedImage={selectedImage}
+                  selectCard={selectCard}
+                  type="whatsapp"
+                  id={`card-section-${activeTab}-whatsapp`}
+                />
+                <CardSection
+                  title={t('linkedin_post')}
+                  cards={linkedinCards}
+                  selectedImage={selectedImage}
+                  selectCard={selectCard}
+                  type="linkedin"
+                  id={`card-section-${activeTab}-linkedin`}
+                />
+              </div>
             </div>
-            <div className="space-y-8 sm:space-y-10">
-              <CardSection
-                title={t('whatsapp_story')}
-                cards={whatsappCards}
-                selectedImage={selectedImage}
-                selectCard={selectCard}
-                type="whatsapp"
-                id={`card-section-${activeTab}-whatsapp`}
-              />
-              <CardSection
-                title={t('linkedin_post')}
-                cards={linkedinCards}
-                selectedImage={selectedImage}
-                selectCard={selectCard}
-                type="linkedin"
-                id={`card-section-${activeTab}-linkedin`}
-              />
-            </div>
-          </div>
-        </section>
+          </section>
+        </AnimatedSection>
         {/* Divider */}
         <div className="max-w-6xl mx-auto border-b border-gray-300 dark:border-gray-600 bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent h-px mb-12" />
 
         {/* Customization and Preview Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto animate-fade-in delay-200">
-          {/* Customization Panel */}
-          <div className="flex flex-col">
-            <div className="bg-gradient-card rounded-xl shadow-card p-6">
-              <h2 className="flex items-center text-2xl font-semibold text-foreground mb-6">
-                <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white mr-3">
-                  2
-                </span>
-                {t('guide_name')}
-              </h2>
-              <div className="space-y-8">
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => {
-                    saveToHistory();
-                    setName(e.target.value);
-                  }}
-                  placeholder={t('enter_name')}
-                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all text-sm text-foreground"
-                  aria-label={t('enter_name')}
-                />
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                  <div>
-                    <label className="flex items-center text-sm font-medium text-foreground mb-2">
-                      <Palette size={16} className="mr-2" />
-                      {t('guide_color')}
-                    </label>
-                    <div className="flex items-center">
-                      <input
-                        type="color"
-                        value={color}
+        <AnimatedSection>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto animate-fade-in delay-200">
+            {/* Customization Panel */}
+            <div className="flex flex-col">
+              <div className="bg-gradient-card rounded-xl shadow-card p-6">
+                <h2 className="flex items-center text-2xl font-semibold text-foreground mb-6">
+                  <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white mr-3">
+                    2
+                  </span>
+                  {t('guide_name')}
+                </h2>
+                <div className="space-y-8">
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => {
+                      saveToHistory();
+                      setName(e.target.value);
+                    }}
+                    placeholder={t('enter_name')}
+                    className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all text-sm text-foreground"
+                    aria-label={t('enter_name')}
+                  />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                    <div>
+                      <label className="flex items-center text-sm font-medium text-foreground mb-2">
+                        <Palette size={16} className="mr-2" />
+                        {t('guide_color')}
+                      </label>
+                      <div className="flex items-center">
+                        <input
+                          type="color"
+                          value={color}
+                          onChange={(e) => {
+                            saveToHistory();
+                            setColor(e.target.value);
+                          }}
+                          className="w-12 h-12 rounded-lg border-none cursor-pointer shadow-sm"
+                          aria-label={t('guide_color')}
+                        />
+                        <span className="ml-3 text-sm font-mono text-gray-600 dark:text-gray-400">
+                          {color}
+                        </span>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="flex items-center text-sm font-medium text-foreground mb-2">
+                        {t('font_language')}
+                      </label>
+                      <div className="flex items-center space-x-6">
+                        <RadioButton
+                          label={t('arabic')}
+                          checked={fontLanguage === 'arabic'}
+                          onChange={() => {
+                            saveToHistory();
+                            setFontLanguage('arabic');
+                            setFont('Cairo');
+                            loadFontOnDemand('Cairo');
+                          }}
+                        />
+                        <RadioButton
+                          label={t('english')}
+                          checked={fontLanguage === 'english'}
+                          onChange={() => {
+                            saveToHistory();
+                            setFontLanguage('english');
+                            setFont('Roboto');
+                            loadFontOnDemand('Roboto');
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="flex items-center text-sm font-medium text-foreground mb-2">
+                        <Type size={16} className="mr-2" />
+                        {t('guide_font')}
+                      </label>
+                      <Select
+                        value={font}
                         onChange={(e) => {
                           saveToHistory();
-                          setColor(e.target.value);
+                          setFont(e.target.value);
+                          loadFontOnDemand(e.target.value);
                         }}
-                        className="w-12 h-12 rounded-lg border-none cursor-pointer shadow-sm"
-                        aria-label={t('guide_color')}
-                      />
-                      <span className="ml-3 text-sm font-mono text-gray-600 dark:text-gray-400">
-                        {color}
-                      </span>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="flex items-center text-sm font-medium text-foreground mb-2">
-                      {t('font_language')}
-                    </label>
-                    <div className="flex items-center space-x-6">
-                      <RadioButton
-                        label={t('arabic')}
-                        checked={fontLanguage === 'arabic'}
-                        onChange={() => {
-                          saveToHistory();
-                          setFontLanguage('arabic');
-                          setFont('Cairo');
-                          loadFontOnDemand('Cairo');
-                        }}
-                      />
-                      <RadioButton
-                        label={t('english')}
-                        checked={fontLanguage === 'english'}
-                        onChange={() => {
-                          saveToHistory();
-                          setFontLanguage('english');
-                          setFont('Roboto');
-                          loadFontOnDemand('Roboto');
-                        }}
+                        options={
+                          fontLanguage === 'arabic'
+                            ? fontConfig.arabic.map((f) => ({
+                                value: f,
+                                label: f,
+                              }))
+                            : fontConfig.english.map((f) => ({
+                                value: f,
+                                label: f,
+                              }))
+                        }
+                        aria-label={t('guide_font')}
                       />
                     </div>
-                  </div>
-                  <div>
-                    <label className="flex items-center text-sm font-medium text-foreground mb-2">
-                      <Type size={16} className="mr-2" />
-                      {t('guide_font')}
-                    </label>
-                    <Select
-                      value={font}
-                      onChange={(e) => {
-                        saveToHistory();
-                        setFont(e.target.value);
-                        loadFontOnDemand(e.target.value);
-                      }}
-                      options={
-                        fontLanguage === 'arabic'
-                          ? fontConfig.arabic.map((f) => ({
-                              value: f,
-                              label: f,
-                            }))
-                          : fontConfig.english.map((f) => ({
-                              value: f,
-                              label: f,
-                            }))
-                      }
-                      aria-label={t('guide_font')}
-                    />
-                  </div>
-                  <div>
-                    <label className="flex items-center text-sm font-medium text-foreground mb-2">
-                      {t('guide_font_style')}
-                    </label>
-                    <Select
-                      value={fontStyle}
-                      onChange={(e) => {
-                        saveToHistory();
-                        setFontStyle(e.target.value);
-                      }}
-                      options={[
-                        { value: 'normal', label: t('normal') },
-                        { value: 'bold', label: t('bold') },
-                        { value: 'italic', label: t('italic') },
-                      ]}
-                      aria-label={t('guide_font_style')}
-                    />
-                  </div>
-                  <div>
-                    <label className="flex items-center text-sm font-medium text-foreground mb-2">
-                      {t('guide_font_size')}
-                    </label>
-                    <div className="flex items-center gap-3">
-                      <input
-                        type="range"
-                        min="20"
-                        max="300"
-                        step="5"
-                        value={fontSize}
+                    <div>
+                      <label className="flex items-center text-sm font-medium text-foreground mb-2">
+                        {t('guide_font_style')}
+                      </label>
+                      <Select
+                        value={fontStyle}
                         onChange={(e) => {
                           saveToHistory();
-                          setFontSize(Number(e.target.value));
+                          setFontStyle(e.target.value);
                         }}
-                        className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg cursor-pointer accent-blue-600"
-                        aria-label={t('guide_font_size')}
+                        options={[
+                          { value: 'normal', label: t('normal') },
+                          { value: 'bold', label: t('bold') },
+                          { value: 'italic', label: t('italic') },
+                        ]}
+                        aria-label={t('guide_font_style')}
                       />
-                      <span className="text-sm font-mono w-14 text-right text-gray-600 dark:text-gray-400">
-                        {fontSize}px
-                      </span>
+                    </div>
+                    <div>
+                      <label className="flex items-center text-sm font-medium text-foreground mb-2">
+                        {t('guide_font_size')}
+                      </label>
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="range"
+                          min="20"
+                          max="300"
+                          step="5"
+                          value={fontSize}
+                          onChange={(e) => {
+                            saveToHistory();
+                            setFontSize(Number(e.target.value));
+                          }}
+                          className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg cursor-pointer accent-blue-600"
+                          aria-label={t('guide_font_size')}
+                        />
+                        <span className="text-sm font-mono w-14 text-right text-gray-600 dark:text-gray-400">
+                          {fontSize}px
+                        </span>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="flex items-center text-sm font-medium text-foreground mb-2">
+                        {t('text_shadow')}
+                      </label>
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="range"
+                          min="0"
+                          max="10"
+                          step="0.5"
+                          value={textShadow}
+                          onChange={(e) => {
+                            saveToHistory();
+                            setTextShadow(Number(e.target.value));
+                          }}
+                          className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg cursor-pointer accent-blue-600"
+                          aria-label={t('text_shadow')}
+                        />
+                        <span className="text-sm font-mono w-14 text-right text-gray-600 dark:text-gray-400">
+                          {textShadow}px
+                        </span>
+                      </div>
                     </div>
                   </div>
-                  <div>
-                    <label className="flex items-center text-sm font-medium text-foreground mb-2">
-                      {t('text_shadow')}
-                    </label>
-                    <div className="flex items-center gap-3">
-                      <input
-                        type="range"
-                        min="0"
-                        max="10"
-                        step="0.5"
-                        value={textShadow}
-                        onChange={(e) => {
-                          saveToHistory();
-                          setTextShadow(Number(e.target.value));
-                        }}
-                        className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg cursor-pointer accent-blue-600"
-                        aria-label={t('text_shadow')}
-                      />
-                      <span className="text-sm font-mono w-14 text-right text-gray-600 dark:text-gray-400">
-                        {textShadow}px
-                      </span>
-                    </div>
+                  <div className="flex flex-wrap gap-4">
+                    {Object.keys(presets).map((preset) => (
+                      <button
+                        key={preset}
+                        onClick={() => applyPreset(preset)}
+                        className="px-4 py-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-all text-sm"
+                      >
+                        {t(preset)}
+                      </button>
+                    ))}
                   </div>
-                </div>
-                <div className="flex flex-wrap gap-4">
-                  {Object.keys(presets).map((preset) => (
+                  <div className="flex gap-4">
                     <button
-                      key={preset}
-                      onClick={() => applyPreset(preset)}
-                      className="px-4 py-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-all text-sm"
+                      onClick={undo}
+                      disabled={history.length === 0}
+                      className={
+                        history.length === 0
+                          ? 'flex items-center px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed text-sm'
+                          : 'flex items-center px-4 py-2 rounded-lg bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-200 hover:bg-yellow-200 dark:hover:bg-yellow-800 transition-all text-sm'
+                      }
+                      aria-label={t('undo')}
                     >
-                      {t(preset)}
+                      <Undo2 size={16} className="mr-2" />
+                      {t('undo')}
                     </button>
-                  ))}
-                </div>
-                <div className="flex gap-4">
-                  <button
-                    onClick={undo}
-                    disabled={history.length === 0}
-                    className={
-                      history.length === 0
-                        ? 'flex items-center px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed text-sm'
-                        : 'flex items-center px-4 py-2 rounded-lg bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-200 hover:bg-yellow-200 dark:hover:bg-yellow-800 transition-all text-sm'
-                    }
-                    aria-label={t('undo')}
-                  >
-                    <Undo2 size={16} className="mr-2" />
-                    {t('undo')}
-                  </button>
-                  <button
-                    onClick={reset}
-                    className="flex items-center px-4 py-2 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 rounded-lg hover:bg-red-200 dark:hover:bg-red-800 transition-all text-sm"
-                    aria-label={t('reset')}
-                  >
-                    <RefreshCw size={16} className="mr-2" />
-                    {t('reset')}
-                  </button>
+                    <button
+                      onClick={reset}
+                      className="flex items-center px-4 py-2 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 rounded-lg hover:bg-red-200 dark:hover:bg-red-800 transition-all text-sm"
+                      aria-label={t('reset')}
+                    >
+                      <RefreshCw size={16} className="mr-2" />
+                      {t('reset')}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Preview and Actions */}
-          <div className="flex flex-col">
-            <div className="bg-gradient-card rounded-xl shadow-card p-4 sm:p-6 px-0 sm:px-4 flex-1">
-              <div className="flex items-center justify-between mb-4 sm:mb-6">
-                <h2 className="flex items-center text-xl sm:text-2xl font-semibold text-foreground">
-                  <span className="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-600 text-white mr-2 sm:mr-3 text-sm sm:text-base">
-                    3
-                  </span>
-                  {t('preview')}
-                </h2>
-                <div className="flex items-center text-xs sm:text-sm text-blue-600 dark:text-blue-400">
-                  <Wand2 size={16} className="mr-1 sm:mr-2" />
-                  {t('position_tip')}
-                </div>
-              </div>
-              <div
-                className="relative w-full flex items-center justify-center"
-                aria-busy={isLoading}
-              >
-                {isLoading ? (
-                  <div className="w-full max-h-[480px] rounded-xl flex items-center justify-center bg-gray-100 dark:bg-gray-700">
-                    <div className="flex flex-col items-center">
-                      <Loader2 className="w-8 sm:w-10 h-8 sm:h-10 text-blue-600 animate-spin mb-3" />
-                      <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                        {t('loading_fonts')}
-                      </p>
-                    </div>
+            {/* Preview and Actions */}
+            <div className="flex flex-col">
+              <div className="bg-gradient-card rounded-xl shadow-card p-4 sm:p-6 px-0 sm:px-4 flex-1">
+                <div className="flex items-center justify-between mb-4 sm:mb-6">
+                  <h2 className="flex items-center text-xl sm:text-2xl font-semibold text-foreground">
+                    <span className="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-600 text-white mr-2 sm:mr-3 text-sm sm:text-base">
+                      3
+                    </span>
+                    {t('preview')}
+                  </h2>
+                  <div className="flex items-center text-xs sm:text-sm text-blue-600 dark:text-blue-400">
+                    <Wand2 size={16} className="mr-1 sm:mr-2" />
+                    {t('position_tip')}
                   </div>
-                ) : selectedImage ? (
-                  <div
-                    id="preview-container"
-                    className="w-full flex items-center justify-center"
-                  >
+                </div>
+                <div
+                  className="relative w-full flex items-center justify-center"
+                  aria-busy={isLoading}
+                >
+                  {isLoading ? (
+                    <div className="w-full max-h-[480px] rounded-xl flex items-center justify-center bg-gray-100 dark:bg-gray-700">
+                      <div className="flex flex-col items-center">
+                        <Loader2 className="w-8 sm:w-10 h-8 sm:h-10 text-blue-600 animate-spin mb-3" />
+                        <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                          {t('loading_fonts')}
+                        </p>
+                      </div>
+                    </div>
+                  ) : selectedImage ? (
                     <div
-                      id="card-preview"
-                      ref={previewRef}
-                      className={`
+                      id="preview-container"
+                      className="w-full flex items-center justify-center"
+                    >
+                      <div
+                        id="card-preview"
+                        ref={previewRef}
+                        className={`
               relative rounded-xl shadow-xl bg-center bg-no-repeat bg-contain overflow-hidden cursor-pointer transition-transform duration-200 h-auto
               ${
                 selectedCardType === 'whatsapp'
@@ -972,95 +976,96 @@ const CardSelector = () => {
                   : 'aspect-[16/15] w-full max-h-[540px] sm:max-h-[720px] lg:max-h-[810px]'
               }
             `}
-                      onClick={handlePreviewClick}
-                      onMouseDown={handleMouseDown}
-                      onMouseMove={handleMouseMove}
-                      onMouseUp={handleMouseUp}
-                      onMouseLeave={handleMouseUp}
-                      onTouchStart={handleTouchStart}
-                      onTouchMove={handleTouchMove}
-                      onTouchEnd={handleTouchEnd}
-                      role="region"
-                      aria-label={t('card_preview')}
-                    >
-                      <span
-                        id="name-preview"
-                        ref={namePreviewRef}
-                        className="absolute cursor-move select-none text-base sm:text-lg lg:text-xl text-white drop-shadow-md"
+                        onClick={handlePreviewClick}
+                        onMouseDown={handleMouseDown}
+                        onMouseMove={handleMouseMove}
+                        onMouseUp={handleMouseUp}
+                        onMouseLeave={handleMouseUp}
+                        onTouchStart={handleTouchStart}
+                        onTouchMove={handleTouchMove}
+                        onTouchEnd={handleTouchEnd}
+                        role="region"
+                        aria-label={t('card_preview')}
                       >
-                        {name || t('text_preview')}
-                      </span>
+                        <span
+                          id="name-preview"
+                          ref={namePreviewRef}
+                          className="absolute cursor-move select-none text-base sm:text-lg lg:text-xl text-white drop-shadow-md"
+                        >
+                          {name || t('text_preview')}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                ) : (
-                  <div className="w-full max-h-[480px] rounded-xl flex items-center justify-center bg-gray-100 dark:bg-gray-700">
-                    <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                      {t('select_card')}
-                    </p>
+                  ) : (
+                    <div className="w-full max-h-[480px] rounded-xl flex items-center justify-center bg-gray-100 dark:bg-gray-700">
+                      <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                        {t('select_card')}
+                      </p>
+                    </div>
+                  )}
+                </div>
+                {selectedImage && (
+                  <div className="flex items-center justify-center mt-4 gap-2">
+                    <button
+                      onClick={() =>
+                        setZoomLevel((prev) => Math.min(prev + 0.1, 2))
+                      }
+                      className="p-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-all"
+                      aria-label={t('zoom_in')}
+                    >
+                      <ZoomIn size={16} />
+                    </button>
+                    <button
+                      onClick={() =>
+                        setZoomLevel((prev) => Math.max(prev - 0.1, 0.5))
+                      }
+                      className="p-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-all"
+                      aria-label={t('zoom_out')}
+                    >
+                      <ZoomOut size={16} />
+                    </button>
                   </div>
                 )}
-              </div>
-              {selectedImage && (
-                <div className="flex items-center justify-center mt-4 gap-2">
+                <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-4 sm:mt-8">
                   <button
-                    onClick={() =>
-                      setZoomLevel((prev) => Math.min(prev + 0.1, 2))
+                    onClick={downloadCard}
+                    disabled={!selectedImage || actionLoading}
+                    className={
+                      !selectedImage || actionLoading
+                        ? 'flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-medium text-white bg-gray-300 dark:bg-gray-600 cursor-not-allowed text-xs sm:text-sm'
+                        : 'flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-medium text-white bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all text-xs sm:text-sm'
                     }
-                    className="p-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-all"
-                    aria-label={t('zoom_in')}
+                    aria-label={t('save_card')}
                   >
-                    <ZoomIn size={16} />
+                    {actionLoading ? (
+                      <Loader2 className="w-4 sm:w-5 h-4 sm:h-5 animate-spin mr-2" />
+                    ) : (
+                      <Download className="w-4 sm:w-5 h-4 sm:h-5 mr-2" />
+                    )}
+                    {t('save_card')}
                   </button>
                   <button
-                    onClick={() =>
-                      setZoomLevel((prev) => Math.max(prev - 0.1, 0.5))
+                    onClick={shareCard}
+                    disabled={!selectedImage || actionLoading}
+                    className={
+                      !selectedImage || actionLoading
+                        ? 'flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-medium text-white bg-gray-300 dark:bg-gray-600 cursor-not-allowed text-xs sm:text-sm'
+                        : 'flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-medium text-white bg-green-700 hover:bg-green-800 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all text-xs sm:text-sm'
                     }
-                    className="p-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-all"
-                    aria-label={t('zoom_out')}
+                    aria-label={t('share_card')}
                   >
-                    <ZoomOut size={16} />
+                    {actionLoading ? (
+                      <Loader2 className="w-4 sm:w-5 h-4 sm:h-5 animate-spin mr-2" />
+                    ) : (
+                      <Share2 className="w-4 sm:w-5 h-4 sm:h-5 mr-2" />
+                    )}
+                    {t('share_card')}
                   </button>
                 </div>
-              )}
-              <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-4 sm:mt-8">
-                <button
-                  onClick={downloadCard}
-                  disabled={!selectedImage || actionLoading}
-                  className={
-                    !selectedImage || actionLoading
-                      ? 'flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-medium text-white bg-gray-300 dark:bg-gray-600 cursor-not-allowed text-xs sm:text-sm'
-                      : 'flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-medium text-white bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all text-xs sm:text-sm'
-                  }
-                  aria-label={t('save_card')}
-                >
-                  {actionLoading ? (
-                    <Loader2 className="w-4 sm:w-5 h-4 sm:h-5 animate-spin mr-2" />
-                  ) : (
-                    <Download className="w-4 sm:w-5 h-4 sm:h-5 mr-2" />
-                  )}
-                  {t('save_card')}
-                </button>
-                <button
-                  onClick={shareCard}
-                  disabled={!selectedImage || actionLoading}
-                  className={
-                    !selectedImage || actionLoading
-                      ? 'flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-medium text-white bg-gray-300 dark:bg-gray-600 cursor-not-allowed text-xs sm:text-sm'
-                      : 'flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-medium text-white bg-green-700 hover:bg-green-800 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all text-xs sm:text-sm'
-                  }
-                  aria-label={t('share_card')}
-                >
-                  {actionLoading ? (
-                    <Loader2 className="w-4 sm:w-5 h-4 sm:h-5 animate-spin mr-2" />
-                  ) : (
-                    <Share2 className="w-4 sm:w-5 h-4 sm:h-5 mr-2" />
-                  )}
-                  {t('share_card')}
-                </button>
               </div>
             </div>
           </div>
-        </div>
+        </AnimatedSection>
       </main>
     </div>
   );
