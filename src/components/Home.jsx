@@ -19,7 +19,7 @@ const Home = () => {
       <main className="container mx-auto px-4 py-12 lg:px-8 lg:py-16 max-w-7xl relative z-10">
         {/* Hero Section */}
         <AnimatedSection>
-          <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 sm:p-8 lg:p-12 text-center border border-[#e6e9f4] dark:border-gray-700 shadow-inner">
+          <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 sm:p-8 lg:p-12 text-center border border-[#e6e9f4] dark:border-gray-700">
             <div className="mb-6 sm:mb-8">
               <Logo
                 className="h-16 sm:h-20 w-auto max-w-[300px] mx-auto transition-transform duration-300 hover:scale-105"
