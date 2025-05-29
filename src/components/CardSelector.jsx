@@ -674,49 +674,37 @@ const CardSelector = () => {
         <AnimatedSection>
           <section className="w-full max-w-7xl mx-auto mb-8 px-4 sm:px-6 lg:px-8 animate-fade-in delay-100 overflow-x-hidden">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-foreground mb-6 flex items-center">
-              <span className="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-700 text-white mr-3 sm:mr-4 text-sm sm:text-base">
+              <span className="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-600 text-white mr-3 sm:mr-4 text-sm sm:text-base">
                 1
               </span>
               {t('select_card')}
             </h2>
-            <div className="bg-gradient-card rounded-xl shadow-card p-4 sm:p-6 w-full box-border relative shadow-inner">
-              {/* Tab Navigation with Scroll Indicators */}
-              <div className="relative">
-                <div className="flex justify-start overflow-x-auto scrollbar-hidden snap-x snap-mandatory mb-6 gap-2 sm:gap-4 scroll-smooth w-full">
-                  {Object.keys(imageCategories).map((category, index) => (
-                    <button
-                      key={category}
-                      ref={(el) => (tabRefs.current[index] = el)}
-                      className={`
-                snap-center shrink-0 py-2.5 px-3 sm:px-4 min-w-[70px] sm:min-w-[90px] rounded-lg font-semibold text-sm border border-gray-200 dark:border-gray-600 transition-all duration-200 ease-in-out cursor-pointer relative
-                ${
-                  activeTab === category
-                    ? 'bg-blue-700 text-white shadow-xl after:absolute after:inset-x-0 after:-bottom-1 after:h-1 after:bg-blue-700 shadow-[0_4px_12px_rgba(0,0,0,0.2)]'
-                    : 'bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300 shadow-sm hover:bg-blue-100 dark:hover:bg-gray-600 hover:scale-105 hover:shadow-md focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
-                }
-              `}
-                      onClick={() => handleTabChange(category)}
-                      onKeyDown={(e) =>
-                        e.key === 'Enter' && handleTabChange(category)
-                      }
-                      role="tab"
-                      aria-controls={`card-section-${category}`}
-                      aria-selected={activeTab === category}
-                      tabIndex={0}
-                    >
-                      {category}
-                    </button>
-                  ))}
-                </div>
-                {/* Scroll Indicators (Visible on Mobile) */}
-                <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between pointer-events-none sm:hidden">
-                  <span className="w-6 h-6 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center text-gray-500 dark:text-gray-300 pointer-events-auto">
-                    ←
-                  </span>
-                  <span className="w-6 h-6 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center text-gray-500 dark:text-gray-300 pointer-events-auto">
-                    →
-                  </span>
-                </div>
+            <div className="bg-gradient-card rounded-xl shadow-card p-4 sm:p-6 w-full box-border">
+              <div className="flex justify-start overflow-x-auto scrollbar-hidden snap-x snap-mandatory mb-6 gap-1.5 sm:gap-3 scroll-smooth w-full">
+                {Object.keys(imageCategories).map((category, index) => (
+                  <button
+                    key={category}
+                    ref={(el) => (tabRefs.current[index] = el)}
+                    className={` cursor-pointer
+            snap-center shrink-0 py-2 px-2 sm:px-3 min-w-[60px] sm:min-w-[80px] rounded-lg font-semibold text-xs truncate
+            ${
+              activeTab === category
+                ? 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+                : 'text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+            }
+          `}
+                    onClick={() => handleTabChange(category)}
+                    onKeyDown={(e) =>
+                      e.key === 'Enter' && handleTabChange(category)
+                    }
+                    role="tab"
+                    aria-controls={`card-section-${category}`}
+                    aria-selected={activeTab === category}
+                    tabIndex={0}
+                  >
+                    {category}
+                  </button>
+                ))}
               </div>
               <div className="space-y-8 sm:space-y-10">
                 <CardSection
