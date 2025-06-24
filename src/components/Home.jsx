@@ -12,7 +12,7 @@ const Home = () => {
 
   return (
     <div
-      className="bg-gradient-to-br from-[#e6e9f4] via-[#f4e0b5] to-[#243e87]/10 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 min-h-screen flex flex-col items-center justify-center font-sans bg-[url('/light-moon.png')] dark:bg-[url('/dark-moon.png')] bg-cover bg-no-repeat bg-center transition-colors duration-300 ease-in-out sm:bg-fixed"
+      className="bg-gradient-to-br from-[#e6e9f4] via-[#f4e0b5] to-[#243e87]/10 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900 min-h-screen flex flex-col items-center justify-center font-sans bg-[url('/light-moon-small.png')] dark:bg-[url('/dark-moon-small.png')] bg-cover bg-no-repeat bg-center transition-all duration-300 sm:bg-[url('/light-moon.png')] sm:dark:bg-[url('/dark-moon.png')] sm:bg-fixed"
       dir={isArabic ? "rtl" : "ltr"}
     >
       <main className="container mx-auto px-4 py-12 lg:px-8 lg:py-16 max-w-7xl relative z-10">
