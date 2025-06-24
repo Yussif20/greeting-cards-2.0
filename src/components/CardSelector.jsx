@@ -4,38 +4,35 @@ import React, {
   useEffect,
   useCallback,
   useMemo,
-} from 'react';
-import { useTranslation } from 'react-i18next';
-import { imageCategories } from '../data';
-import debounce from 'lodash/debounce';
-// import html2canvas from 'html2canvas';
+} from "react";
+import { useTranslation } from "react-i18next";
+import { imageCategories } from "../data";
+import debounce from "lodash/debounce";
 import {
   Download,
-  Share2,
   Palette,
   Type,
   ChevronsUpDown,
   Wand2,
   Check,
   Loader2,
-  Undo2,
-  RefreshCw,
+  ArrowLeft, // Replaced Undo2 with ArrowLeft to avoid SVG path issues
+  RotateCcw, // Replaced RefreshCw with RotateCcw for consistency
   ZoomIn,
   ZoomOut,
-} from 'lucide-react';
-import AnimatedSection from './AnimatedSection';
+} from "lucide-react";
+import AnimatedSection from "./AnimatedSection";
 
 const CardSelector = () => {
   const { t, i18n } = useTranslation();
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedCardType, setSelectedCardType] = useState(null);
-  const [name, setName] = useState('');
-  const [color, setColor] = useState('#ffffff');
+  const [name, setName] = useState("");
+  const [color, setColor] = useState("#ffffff");
   const [namePosition, setNamePosition] = useState({ x: 540, y: 540 });
-  const [font, setFont] = useState('Cairo');
-  const [fontStyle, setFontStyle] = useState('normal');
-  const [fontLanguage, setFontLanguage] = useState('arabic');
-  const [activeTab, setActiveTab] = useState('RHC');
+  const [font, setFont] = useState("Cairo");
+  const [fontStyle, setFontStyle] = useState("normal");
+  const [fontLanguage, setFontLanguage] = useState("arabic");
   const [fontSize, setFontSize] = useState(60);
   const [textShadow, setTextShadow] = useState(2);
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -49,30 +46,29 @@ const CardSelector = () => {
 
   const previewRef = useRef(null);
   const namePreviewRef = useRef(null);
-  const tabRefs = useRef([]);
   const containerRef = useRef(null);
 
   // Style presets
   const presets = useMemo(
     () => ({
       elegant: {
-        color: '#4B2E39',
-        font: 'Amiri',
-        fontStyle: 'normal',
+        color: "#4B2E39",
+        font: "Amiri",
+        fontStyle: "normal",
         fontSize: 85,
         textShadow: 3.5,
       },
       professional: {
-        color: '#000000',
-        font: 'Cairo',
-        fontStyle: 'normal',
+        color: "#000000",
+        font: "Cairo",
+        fontStyle: "normal",
         fontSize: 70,
         textShadow: 2,
       },
       festive: {
-        color: '#B91C1C',
-        font: 'Scheherazade',
-        fontStyle: 'normal',
+        color: "#B91C1C",
+        font: "Scheherazade",
+        fontStyle: "normal",
         fontSize: 90,
         textShadow: 4,
       },
@@ -84,20 +80,20 @@ const CardSelector = () => {
   const fontConfig = useMemo(
     () => ({
       arabic: [
-        'Cairo',
-        'Tajawal',
-        'Amiri',
-        'Noto Naskh Arabic',
-        'Scheherazade',
-        'Almarai',
-        'Reem Kufi',
+        "Cairo",
+        "Tajawal",
+        "Amiri",
+        "Noto Naskh Arabic",
+        "Scheherazade",
+        "Almarai",
+        "Reem Kufi",
       ],
       english: [
-        'Roboto',
-        'Merriweather',
-        'Playfair Display',
-        'Open Sans',
-        'Montserrat',
+        "Roboto",
+        "Merriweather",
+        "Playfair Display",
+        "Open Sans",
+        "Montserrat",
       ],
     }),
     []
@@ -108,25 +104,25 @@ const CardSelector = () => {
     const loadFonts = async () => {
       setIsLoading(true);
       try {
-        const cachedFonts = localStorage.getItem('loadedFonts');
+        const cachedFonts = localStorage.getItem("loadedFonts");
         if (cachedFonts) {
           setFontsLoaded(true);
           setIsLoading(false);
           return;
         }
 
-        const preconnect = document.createElement('link');
-        preconnect.rel = 'preconnect';
-        preconnect.href = 'https://fonts.googleapis.com';
+        const preconnect = document.createElement("link");
+        preconnect.rel = "preconnect";
+        preconnect.href = "https://fonts.googleapis.com";
         document.head.appendChild(preconnect);
 
-        const defaultFonts = ['Cairo', 'Roboto', 'Amiri', 'Scheherazade'];
+        const defaultFonts = ["Cairo", "Roboto", "Amiri", "Scheherazade"];
         defaultFonts.forEach((fontName) => {
-          const link = document.createElement('link');
-          link.rel = 'stylesheet';
+          const link = document.createElement("link");
+          link.rel = "stylesheet";
           link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(
             /\s+/g,
-            '+'
+            "+"
           )}:wght@400;700&display=swap`;
           document.head.appendChild(link);
         });
@@ -134,16 +130,16 @@ const CardSelector = () => {
         await Promise.race([
           document.fonts.ready,
           new Promise((_, reject) =>
-            setTimeout(() => reject(new Error('Font load timeout')), 5000)
+            setTimeout(() => reject(new Error("Font load timeout")), 5000)
           ),
         ]);
 
-        localStorage.setItem('loadedFonts', 'true');
+        localStorage.setItem("loadedFonts", "true");
         setFontsLoaded(true);
         setIsLoading(false);
       } catch (err) {
-        console.error('Font loading error:', err);
-        setError(t('font_load_error_retry'));
+        console.error("Font loading error:", err);
+        setError(t("font_load_error_retry"));
         setFontsLoaded(true);
         setIsLoading(false);
       }
@@ -157,18 +153,18 @@ const CardSelector = () => {
     async (fontName) => {
       if (document.fonts.check(`16px "${fontName}"`)) return;
       try {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
         link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(
           /\s+/g,
-          '+'
+          "+"
         )}:wght@400;700&display=swap`;
         document.head.appendChild(link);
         await document.fonts.ready;
       } catch (err) {
         console.error(`Failed to load font ${fontName}:`, err);
-        setError(t('font_load_error_retry'));
-        setFont(fontLanguage === 'arabic' ? 'Cairo' : 'Roboto');
+        setError(t("font_load_error_retry"));
+        setFont(fontLanguage === "arabic" ? "Cairo" : "Roboto");
       }
     },
     [t, fontLanguage]
@@ -177,28 +173,28 @@ const CardSelector = () => {
   // Retry font loading
   const retryFontLoading = useCallback(() => {
     setError(null);
-    localStorage.removeItem('loadedFonts');
+    localStorage.removeItem("loadedFonts");
     setFontsLoaded(false);
     setIsLoading(true);
     const loadFonts = async () => {
       try {
-        const defaultFonts = ['Cairo', 'Roboto', 'Amiri', 'Scheherazade'];
+        const defaultFonts = ["Cairo", "Roboto", "Amiri", "Scheherazade"];
         defaultFonts.forEach((fontName) => {
-          const link = document.createElement('link');
-          link.rel = 'stylesheet';
+          const link = document.createElement("link");
+          link.rel = "stylesheet";
           link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(
             /\s+/g,
-            '+'
+            "+"
           )}:wght@400;700&display=swap`;
           document.head.appendChild(link);
         });
         await document.fonts.ready;
-        localStorage.setItem('loadedFonts', 'true');
+        localStorage.setItem("loadedFonts", "true");
         setFontsLoaded(true);
         setIsLoading(false);
       } catch (err) {
-        console.error('Font loading error:', err);
-        setError(t('font_load_error_retry'));
+        console.error("Font loading error:", err);
+        setError(t("font_load_error_retry"));
         setFontsLoaded(true);
         setIsLoading(false);
       }
@@ -232,38 +228,38 @@ const CardSelector = () => {
     fontLanguage,
   ]);
 
-  // Handle tab change with smooth scrolling
-  const handleTabChange = useCallback(
-    (category) => {
-      setActiveTab(category);
-      const activeIndex = Object.keys(imageCategories).indexOf(category);
-      const activeTabRef = tabRefs.current[activeIndex];
-      if (activeTabRef) {
-        const container = activeTabRef.parentElement;
-        const containerRect = container.getBoundingClientRect();
-        const tabRect = activeTabRef.getBoundingClientRect();
-        const isRTL = i18n.language === 'ar';
-        const scrollLeft = isRTL
-          ? container.scrollLeft +
-            (tabRect.right - containerRect.right) +
-            tabRect.width / 2
-          : tabRect.left +
-            container.scrollLeft -
-            containerRect.left -
-            containerRect.width / 2 +
-            tabRect.width / 2;
-        container.scrollTo({ left: scrollLeft, behavior: 'smooth' });
-      }
-    },
-    [i18n.language]
-  );
+  // Undo function
+  const undo = useCallback(() => {
+    if (history.length === 0) return;
+    const previousState = history[history.length - 1];
+    setHistory((prev) => prev.slice(0, -1));
+    setName(previousState.name);
+    setColor(previousState.color);
+    setNamePosition(previousState.namePosition);
+    setFont(previousState.font);
+    setFontStyle(previousState.fontStyle);
+    setFontSize(previousState.fontSize);
+    setTextShadow(previousState.textShadow);
+    setFontLanguage(previousState.fontLanguage);
+    loadFontOnDemand(previousState.font);
+  }, [history, loadFontOnDemand]);
 
-  // Auto-scroll to RHC on mount
-  useEffect(() => {
-    if (activeTab === 'RHC') {
-      handleTabChange('RHC');
-    }
-  }, [handleTabChange]);
+  // Reset function
+  const reset = useCallback(() => {
+    saveToHistory();
+    setName("");
+    setColor("#ffffff");
+    setNamePosition({
+      x: selectedImage?.width / 2 || 540,
+      y: selectedImage?.height / 2 || 540,
+    });
+    setFont("Cairo");
+    setFontStyle("normal");
+    setFontSize(60);
+    setTextShadow(2);
+    setFontLanguage("arabic");
+    loadFontOnDemand("Cairo");
+  }, [saveToHistory, selectedImage, loadFontOnDemand]);
 
   // Select a card
   const selectCard = useCallback(
@@ -271,7 +267,7 @@ const CardSelector = () => {
       setIsLoading(true);
       setError(null);
       const img = new Image();
-      img.crossOrigin = 'Anonymous';
+      img.crossOrigin = "Anonymous";
       img.src = card.src;
 
       img.onload = () => {
@@ -279,14 +275,14 @@ const CardSelector = () => {
         setSelectedCardType(card.type);
         setNamePosition({
           x: img.width / 2,
-          y: card.type === 'whatsapp' ? img.height * 0.8 : img.height / 2,
+          y: img.height / 2,
         });
-        setFontSize(card.type === 'whatsapp' ? 80 : 120);
+        setFontSize(80);
         setIsLoading(false);
       };
 
       img.onerror = () => {
-        setError(t('image_load_error'));
+        setError(t("image_load_error"));
         setSelectedImage(null);
         setSelectedCardType(null);
         setIsLoading(false);
@@ -317,32 +313,32 @@ const CardSelector = () => {
     if (!preview || !namePreview || !selectedImage) return;
 
     preview.style.backgroundImage = `url(${selectedImage.src})`;
-    preview.style.backgroundSize = 'contain';
-    preview.style.backgroundPosition = 'center';
-    preview.style.backgroundRepeat = 'no-repeat';
+    preview.style.backgroundSize = "contain";
+    preview.style.backgroundPosition = "center";
+    preview.style.backgroundRepeat = "no-repeat";
     preview.style.transform = `scale(${zoomLevel})`;
 
     namePreview.style.fontFamily = fontsLoaded
       ? `"${font}", system-ui, sans-serif`
-      : 'system-ui, sans-serif';
+      : "system-ui, sans-serif";
     namePreview.style.color = color;
     namePreview.style.fontSize = `${
       fontSize * (preview.offsetWidth / selectedImage.width)
     }px`;
-    namePreview.style.fontWeight = fontStyle === 'bold' ? '700' : '400';
-    namePreview.style.fontStyle = fontStyle === 'italic' ? 'italic' : 'normal';
+    namePreview.style.fontWeight = fontStyle === "bold" ? "700" : "400";
+    namePreview.style.fontStyle = fontStyle === "italic" ? "italic" : "normal";
     namePreview.style.textShadow = `0 1px ${textShadow}px rgba(0,0,0,0.5)`;
-    namePreview.style.direction = fontLanguage === 'arabic' ? 'rtl' : 'ltr';
-    namePreview.style.textAlign = 'center';
+    namePreview.style.direction = fontLanguage === "arabic" ? "rtl" : "ltr";
+    namePreview.style.textAlign = "center";
 
     const scaleX = preview.offsetWidth / selectedImage.width;
     const scaleY = preview.offsetHeight / selectedImage.height;
 
-    namePreview.style.position = 'absolute';
+    namePreview.style.position = "absolute";
     namePreview.style.left = `${namePosition.x * scaleX}px`;
     namePreview.style.top = `${namePosition.y * scaleY}px`;
-    namePreview.style.transform = 'translate(-50%, -50%)';
-    namePreview.innerText = name || t('text_preview');
+    namePreview.style.transform = "translate(-50%, -50%)";
+    namePreview.innerText = name || t("text_preview");
   }, [
     selectedImage,
     name,
@@ -458,10 +454,10 @@ const CardSelector = () => {
     setActionLoading(true);
     setError(null);
     try {
-      const tempCanvas = document.createElement('canvas');
+      const tempCanvas = document.createElement("canvas");
       tempCanvas.width = selectedImage.width;
       tempCanvas.height = selectedImage.height;
-      const tempCtx = tempCanvas.getContext('2d');
+      const tempCtx = tempCanvas.getContext("2d");
       tempCtx.drawImage(
         selectedImage,
         0,
@@ -470,25 +466,25 @@ const CardSelector = () => {
         selectedImage.height
       );
       if (name) {
-        tempCtx.font = `${fontStyle === 'bold' ? '700' : '400'} ${
-          fontStyle === 'italic' ? 'italic' : ''
+        tempCtx.font = `${fontStyle === "bold" ? "700" : "400"} ${
+          fontStyle === "italic" ? "italic" : ""
         } ${fontSize}px "${font}"`;
         tempCtx.fillStyle = color;
-        tempCtx.textAlign = 'center';
-        tempCtx.textBaseline = 'middle';
-        tempCtx.shadowColor = 'rgba(0,0,0,0.5)';
+        tempCtx.textAlign = "center";
+        tempCtx.textBaseline = "middle";
+        tempCtx.shadowColor = "rgba(0,0,0,0.5)";
         tempCtx.shadowBlur = textShadow;
-        tempCtx.direction = fontLanguage === 'arabic' ? 'rtl' : 'ltr';
+        tempCtx.direction = fontLanguage === "arabic" ? "rtl" : "ltr";
         tempCtx.fillText(name, namePosition.x, namePosition.y);
       }
-      const dataUrl = tempCanvas.toDataURL('image/png');
-      const link = document.createElement('a');
-      link.download = 'company-greeting-card.png';
+      const dataUrl = tempCanvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.download = "new-hijri-year-card.png";
       link.href = dataUrl;
       link.click();
     } catch (err) {
-      console.error('Download failed:', err);
-      setError(t('download_error'));
+      console.error("Download failed:", err);
+      setError(t("download_error"));
     } finally {
       setActionLoading(false);
     }
@@ -505,119 +501,14 @@ const CardSelector = () => {
     fontLanguage,
   ]);
 
-  // Share card
-  // const shareCard = useCallback(async () => {
-  //   if (!selectedImage) return;
-  //   setActionLoading(true);
-  //   setError(null);
-  //   try {
-  //     const canvas = await html2canvas(previewRef.current, {
-  //       useCORS: true,
-  //       scale: 2,
-  //       logging: false,
-  //       onclone: (clonedDoc) => {
-  //         const clonedPreview = clonedDoc.querySelector('#card-preview');
-  //         const clonedText = clonedDoc.querySelector('#name-preview');
-  //         if (clonedPreview && clonedText) {
-  //           clonedPreview.style.width = `${selectedImage.width}px`;
-  //           clonedPreview.style.height = `${selectedImage.height}px`;
-  //           clonedText.style.left = `${namePosition.x}px`;
-  //           clonedText.style.top = `${namePosition.y}px`;
-  //           clonedText.style.fontSize = `${fontSize}px`;
-  //           clonedText.style.textShadow = `0 1px ${textShadow}px rgba(0,0,0,0.5)`;
-  //           clonedText.style.fontFamily = fontsLoaded
-  //             ? `"${font}", system-ui, sans-serif`
-  //             : 'system-ui, sans-serif';
-  //           clonedText.style.direction =
-  //             fontLanguage === 'arabic' ? 'rtl' : 'ltr';
-  //         }
-  //       },
-  //     });
-  //     const blob = await new Promise((resolve) =>
-  //       canvas.toBlob(resolve, 'image/png')
-  //     );
-  //     const file = new File([blob], 'company-greeting-card.png', {
-  //       type: 'image/png',
-  //     });
-  //     if (navigator.share) {
-  //       await navigator.share({
-  //         files: [file],
-  //         title: t('greeting_card'),
-  //         text: t('share_message'),
-  //       });
-  //     } else {
-  //       const dataUrl = canvas.toDataURL('image/png');
-  //       const link = document.createElement('a');
-  //       link.download = 'company-greeting-card.png';
-  //       link.href = dataUrl;
-  //       link.click();
-  //     }
-  //   } catch (err) {
-  //     console.error('Share failed:', err);
-  //     setError(t('share_error'));
-  //   } finally {
-  //     setActionLoading(false);
-  //   }
-  // }, [
-  //   selectedImage,
-  //   namePosition,
-  //   fontSize,
-  //   textShadow,
-  //   font,
-  //   t,
-  //   fontsLoaded,
-  //   fontLanguage,
-  // ]);
-
-  // Undo and reset
-  const undo = useCallback(() => {
-    if (history.length === 0) return;
-    const lastState = history[history.length - 1];
-    setHistory((prev) => prev.slice(0, -1));
-    setName(lastState.name);
-    setColor(lastState.color);
-    setNamePosition(lastState.namePosition);
-    setFont(lastState.font);
-    setFontStyle(lastState.fontStyle);
-    setFontSize(lastState.fontSize);
-    setTextShadow(lastState.textShadow);
-    setFontLanguage(lastState.fontLanguage);
-    loadFontOnDemand(lastState.font);
-  }, [history, loadFontOnDemand]);
-
-  const reset = useCallback(() => {
-    saveToHistory();
-    setName('');
-    setColor('#ffffff');
-    setFont(fontLanguage === 'arabic' ? 'Cairo' : 'Roboto');
-    setFontStyle('normal');
-    setFontSize(selectedCardType === 'whatsapp' ? 80 : 120);
-    setTextShadow(2);
-    setNamePosition({
-      x: selectedImage ? selectedImage.width / 2 : 540,
-      y: selectedImage
-        ? selectedCardType === 'whatsapp'
-          ? selectedImage.height * 0.8
-          : selectedImage.height / 2
-        : 540,
-    });
-    loadFontOnDemand(fontLanguage === 'arabic' ? 'Cairo' : 'Roboto');
-  }, [
-    saveToHistory,
-    fontLanguage,
-    selectedCardType,
-    selectedImage,
-    loadFontOnDemand,
-  ]);
-
   // Update preview on state changes
   useEffect(() => {
     if (!selectedImage || !fontsLoaded) return;
     debouncedUpdatePreview();
     const handleResize = () => debouncedUpdatePreview();
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
       debouncedUpdatePreview.cancel();
     };
   }, [selectedImage, fontsLoaded, debouncedUpdatePreview]);
@@ -629,36 +520,32 @@ const CardSelector = () => {
     }
   }, [font, fontsLoaded, loadFontOnDemand]);
 
-  // Filter cards
-  const whatsappCards = useMemo(
-    () =>
-      imageCategories[activeTab]?.filter((card) => card.type === 'whatsapp') ||
-      [],
-    [activeTab]
-  );
-  const linkedinCards = useMemo(
-    () =>
-      imageCategories[activeTab]?.filter((card) => card.type === 'linkedin') ||
-      [],
-    [activeTab]
-  );
+  // Flatten all cards into a single array with fallback
+  const allCards = useMemo(() => {
+    try {
+      return Object.values(imageCategories).flat();
+    } catch (err) {
+      console.error("Error processing imageCategories:", err);
+      return [];
+    }
+  }, []);
 
   return (
     <div
       className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 flex flex-col font-sans"
-      dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}
+      dir={i18n.language === "ar" ? "rtl" : "ltr"}
       ref={containerRef}
     >
       <main className="flex-1 container mx-auto px-4 py-8 lg:px-8 lg:py-12 flex flex-col gap-8 animate-fade-in">
         {error && (
           <div className="mb-6 p-4 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 rounded-lg flex items-center max-w-3xl mx-auto">
             <span className="text-sm">{error}</span>
-            {error.includes('font_load_error_retry') && (
+            {error.includes("font_load_error_retry") && (
               <button
                 onClick={retryFontLoading}
                 className="ml-4 px-3 py-1 bg-red-200 dark:bg-red-800 text-red-800 dark:text-red-100 rounded hover:bg-red-300 dark:hover:bg-red-700 text-sm"
               >
-                {t('retry')}
+                {t("retry")}
               </button>
             )}
             <button
@@ -672,58 +559,28 @@ const CardSelector = () => {
 
         {/* Card Selection Section */}
         <AnimatedSection>
-          <section className="w-full max-w-7xl mx-auto mb-8 px-4 sm:px-6 lg:px-8 animate-fade-in delay-100 overflow-x-hidden">
+          <section className="w-full max-w-7xl mx-auto mb-8 px-4 sm:px-6 lg:px-8 animate-fade-in delay-100">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-foreground mb-6 flex items-center">
               <span className="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-600 text-white mr-3 sm:mr-4 text-sm sm:text-base">
                 1
               </span>
-              {t('select_card')}
+              {t("select_card")}
             </h2>
             <div className="bg-gradient-card rounded-xl shadow-card p-4 sm:p-6 w-full box-border">
-              <div className="flex justify-start overflow-x-auto scrollbar-hidden snap-x snap-mandatory mb-6 gap-1.5 sm:gap-3 scroll-smooth w-full">
-                {Object.keys(imageCategories).map((category, index) => (
-                  <button
-                    key={category}
-                    ref={(el) => (tabRefs.current[index] = el)}
-                    className={` cursor-pointer
-            snap-center shrink-0 py-2 px-2 sm:px-3 min-w-[60px] sm:min-w-[80px] rounded-lg font-semibold text-xs truncate
-            ${
-              activeTab === category
-                ? 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
-                : 'text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
-            }
-          `}
-                    onClick={() => handleTabChange(category)}
-                    onKeyDown={(e) =>
-                      e.key === 'Enter' && handleTabChange(category)
-                    }
-                    role="tab"
-                    aria-controls={`card-section-${category}`}
-                    aria-selected={activeTab === category}
-                    tabIndex={0}
-                  >
-                    {category}
-                  </button>
-                ))}
-              </div>
-              <div className="space-y-8 sm:space-y-10">
+              {allCards.length > 0 ? (
                 <CardSection
-                  title={t('whatsapp_story')}
-                  cards={whatsappCards}
+                  title={t("cards")}
+                  cards={allCards}
                   selectedImage={selectedImage}
                   selectCard={selectCard}
-                  type="whatsapp"
-                  id={`card-section-${activeTab}-whatsapp`}
+                  type="card"
+                  id="card-section-cards"
                 />
-                <CardSection
-                  title={t('linkedin_post')}
-                  cards={linkedinCards}
-                  selectedImage={selectedImage}
-                  selectCard={selectCard}
-                  type="linkedin"
-                  id={`card-section-${activeTab}-linkedin`}
-                />
-              </div>
+              ) : (
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  {t("no_cards_available")}
+                </p>
+              )}
             </div>
           </section>
         </AnimatedSection>
@@ -740,7 +597,7 @@ const CardSelector = () => {
                   <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white mr-3">
                     2
                   </span>
-                  {t('guide_name')}
+                  {t("guide_name")}
                 </h2>
                 <div className="space-y-8">
                   <input
@@ -750,15 +607,15 @@ const CardSelector = () => {
                       saveToHistory();
                       setName(e.target.value);
                     }}
-                    placeholder={t('enter_name')}
+                    placeholder={t("enter_name")}
                     className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all text-sm text-foreground"
-                    aria-label={t('enter_name')}
+                    aria-label={t("enter_name")}
                   />
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                     <div>
                       <label className="flex items-center text-sm font-medium text-foreground mb-2">
                         <Palette size={16} className="mr-2" />
-                        {t('guide_color')}
+                        {t("guide_color")}
                       </label>
                       <div className="flex items-center">
                         <input
@@ -769,7 +626,7 @@ const CardSelector = () => {
                             setColor(e.target.value);
                           }}
                           className="w-12 h-12 rounded-lg border-none cursor-pointer shadow-sm"
-                          aria-label={t('guide_color')}
+                          aria-label={t("guide_color")}
                         />
                         <span className="ml-3 text-sm font-mono text-gray-600 dark:text-gray-400">
                           {color}
@@ -778,27 +635,27 @@ const CardSelector = () => {
                     </div>
                     <div>
                       <label className="flex items-center text-sm font-medium text-foreground mb-2">
-                        {t('font_language')}
+                        {t("font_language")}
                       </label>
                       <div className="flex items-center space-x-6">
                         <RadioButton
-                          label={t('arabic')}
-                          checked={fontLanguage === 'arabic'}
+                          label={t("arabic")}
+                          checked={fontLanguage === "arabic"}
                           onChange={() => {
                             saveToHistory();
-                            setFontLanguage('arabic');
-                            setFont('Cairo');
-                            loadFontOnDemand('Cairo');
+                            setFontLanguage("arabic");
+                            setFont("Cairo");
+                            loadFontOnDemand("Cairo");
                           }}
                         />
                         <RadioButton
-                          label={t('english')}
-                          checked={fontLanguage === 'english'}
+                          label={t("english")}
+                          checked={fontLanguage === "english"}
                           onChange={() => {
                             saveToHistory();
-                            setFontLanguage('english');
-                            setFont('Roboto');
-                            loadFontOnDemand('Roboto');
+                            setFontLanguage("english");
+                            setFont("Roboto");
+                            loadFontOnDemand("Roboto");
                           }}
                         />
                       </div>
@@ -806,7 +663,7 @@ const CardSelector = () => {
                     <div>
                       <label className="flex items-center text-sm font-medium text-foreground mb-2">
                         <Type size={16} className="mr-2" />
-                        {t('guide_font')}
+                        {t("guide_font")}
                       </label>
                       <Select
                         value={font}
@@ -816,7 +673,7 @@ const CardSelector = () => {
                           loadFontOnDemand(e.target.value);
                         }}
                         options={
-                          fontLanguage === 'arabic'
+                          fontLanguage === "arabic"
                             ? fontConfig.arabic.map((f) => ({
                                 value: f,
                                 label: f,
@@ -826,12 +683,12 @@ const CardSelector = () => {
                                 label: f,
                               }))
                         }
-                        aria-label={t('guide_font')}
+                        aria-label={t("guide_font")}
                       />
                     </div>
                     <div>
                       <label className="flex items-center text-sm font-medium text-foreground mb-2">
-                        {t('guide_font_style')}
+                        {t("guide_font_style")}
                       </label>
                       <Select
                         value={fontStyle}
@@ -840,16 +697,16 @@ const CardSelector = () => {
                           setFontStyle(e.target.value);
                         }}
                         options={[
-                          { value: 'normal', label: t('normal') },
-                          { value: 'bold', label: t('bold') },
-                          { value: 'italic', label: t('italic') },
+                          { value: "normal", label: t("normal") },
+                          { value: "bold", label: t("bold") },
+                          { value: "italic", label: t("italic") },
                         ]}
-                        aria-label={t('guide_font_style')}
+                        aria-label={t("guide_font_style")}
                       />
                     </div>
                     <div>
                       <label className="flex items-center text-sm font-medium text-foreground mb-2">
-                        {t('guide_font_size')}
+                        {t("guide_font_size")}
                       </label>
                       <div className="flex items-center gap-3">
                         <input
@@ -863,7 +720,7 @@ const CardSelector = () => {
                             setFontSize(Number(e.target.value));
                           }}
                           className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg cursor-pointer accent-blue-600"
-                          aria-label={t('guide_font_size')}
+                          aria-label={t("guide_font_size")}
                         />
                         <span className="text-sm font-mono w-14 text-right text-gray-600 dark:text-gray-400">
                           {fontSize}px
@@ -872,7 +729,7 @@ const CardSelector = () => {
                     </div>
                     <div>
                       <label className="flex items-center text-sm font-medium text-foreground mb-2">
-                        {t('text_shadow')}
+                        {t("text_shadow")}
                       </label>
                       <div className="flex items-center gap-3">
                         <input
@@ -886,7 +743,7 @@ const CardSelector = () => {
                             setTextShadow(Number(e.target.value));
                           }}
                           className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg cursor-pointer accent-blue-600"
-                          aria-label={t('text_shadow')}
+                          aria-label={t("text_shadow")}
                         />
                         <span className="text-sm font-mono w-14 text-right text-gray-600 dark:text-gray-400">
                           {textShadow}px
@@ -911,21 +768,21 @@ const CardSelector = () => {
                       disabled={history.length === 0}
                       className={
                         history.length === 0
-                          ? 'flex items-center px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed text-sm'
-                          : 'flex items-center px-4 py-2 rounded-lg bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-200 hover:bg-yellow-200 dark:hover:bg-yellow-800 transition-all text-sm'
+                          ? "flex items-center px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed text-sm"
+                          : "flex items-center px-4 py-2 rounded-lg bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-200 hover:bg-yellow-200 dark:hover:bg-yellow-800 transition-all text-sm"
                       }
-                      aria-label={t('undo')}
+                      aria-label={t("undo")}
                     >
-                      <Undo2 size={16} className="mr-2" />
-                      {t('undo')}
+                      <ArrowLeft size={16} className="mr-2" />
+                      {t("undo")}
                     </button>
                     <button
                       onClick={reset}
                       className="flex items-center px-4 py-2 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 rounded-lg hover:bg-red-200 dark:hover:bg-red-800 transition-all text-sm"
-                      aria-label={t('reset')}
+                      aria-label={t("reset")}
                     >
-                      <RefreshCw size={16} className="mr-2" />
-                      {t('reset')}
+                      <RotateCcw size={16} className="mr-2" />
+                      {t("reset")}
                     </button>
                   </div>
                 </div>
@@ -940,11 +797,11 @@ const CardSelector = () => {
                     <span className="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-600 text-white mr-2 sm:mr-3 text-sm sm:text-base">
                       3
                     </span>
-                    {t('preview')}
+                    {t("preview")}
                   </h2>
                   <div className="flex items-center text-xs sm:text-sm text-blue-600 dark:text-blue-400">
                     <Wand2 size={16} className="mr-1 sm:mr-2" />
-                    {t('position_tip')}
+                    {t("position_tip")}
                   </div>
                 </div>
                 <div
@@ -954,9 +811,9 @@ const CardSelector = () => {
                   {isLoading ? (
                     <div className="w-full max-h-[480px] rounded-xl flex items-center justify-center bg-gray-100 dark:bg-gray-700">
                       <div className="flex flex-col items-center">
-                        <Loader2 className="w-8 sm:w-10 h-8 sm:h-10 text-blue-600 animate-spin mb-3" />
+                        <Loader2 className="w-8 sm:w-10 h-8 sm:h-10 text-blue-600 animate-spin mb-2" />
                         <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                          {t('loading_fonts')}
+                          {t("loading_fonts")}
                         </p>
                       </div>
                     </div>
@@ -968,14 +825,7 @@ const CardSelector = () => {
                       <div
                         id="card-preview"
                         ref={previewRef}
-                        className={`
-              relative rounded-xl shadow-xl bg-center bg-no-repeat bg-contain overflow-hidden cursor-pointer transition-transform duration-200 h-auto
-              ${
-                selectedCardType === 'whatsapp'
-                  ? 'aspect-[9/16] w-full max-w-[320px] sm:max-w-[360px] max-h-[568px] sm:max-h-[640px]'
-                  : 'aspect-[16/15] w-full max-h-[540px] sm:max-h-[720px] lg:max-h-[810px]'
-              }
-            `}
+                        className="relative rounded-xl shadow-xl bg-center bg-no-repeat bg-contain overflow-hidden cursor-pointer transition-transform duration-200 h-auto aspect-[16/9] w-full max-h-[540px] sm:max-h-[720px] lg:max-h-[810px]"
                         onClick={handlePreviewClick}
                         onMouseDown={handleMouseDown}
                         onMouseMove={handleMouseMove}
@@ -985,21 +835,21 @@ const CardSelector = () => {
                         onTouchMove={handleTouchMove}
                         onTouchEnd={handleTouchEnd}
                         role="region"
-                        aria-label={t('card_preview')}
+                        aria-label={t("card_preview")}
                       >
                         <span
                           id="name-preview"
                           ref={namePreviewRef}
                           className="absolute cursor-move select-none text-base sm:text-lg lg:text-xl text-white drop-shadow-md"
                         >
-                          {name || t('text_preview')}
+                          {name || t("text_preview")}
                         </span>
                       </div>
                     </div>
                   ) : (
                     <div className="w-full max-h-[480px] rounded-xl flex items-center justify-center bg-gray-100 dark:bg-gray-700">
                       <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                        {t('select_card')}
+                        {t("select_card")}
                       </p>
                     </div>
                   )}
@@ -1011,7 +861,7 @@ const CardSelector = () => {
                         setZoomLevel((prev) => Math.min(prev + 0.1, 2))
                       }
                       className="p-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-all"
-                      aria-label={t('zoom_in')}
+                      aria-label={t("zoom_in")}
                     >
                       <ZoomIn size={16} />
                     </button>
@@ -1020,7 +870,7 @@ const CardSelector = () => {
                         setZoomLevel((prev) => Math.max(prev - 0.1, 0.5))
                       }
                       className="p-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-all"
-                      aria-label={t('zoom_out')}
+                      aria-label={t("zoom_out")}
                     >
                       <ZoomOut size={16} />
                     </button>
@@ -1032,35 +882,18 @@ const CardSelector = () => {
                     disabled={!selectedImage || actionLoading}
                     className={
                       !selectedImage || actionLoading
-                        ? 'flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-medium text-white bg-gray-300 dark:bg-gray-600 cursor-not-allowed text-xs sm:text-sm'
-                        : 'flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-medium text-white bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all text-xs sm:text-sm'
+                        ? "flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-medium text-white bg-gray-300 dark:bg-gray-600 cursor-not-allowed text-xs sm:text-sm"
+                        : "flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-medium text-white bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all text-xs sm:text-sm"
                     }
-                    aria-label={t('save_card')}
+                    aria-label={t("save_card")}
                   >
                     {actionLoading ? (
                       <Loader2 className="w-4 sm:w-5 h-4 sm:h-5 animate-spin mr-2" />
                     ) : (
                       <Download className="w-4 sm:w-5 h-4 sm:h-5 mr-2" />
                     )}
-                    {t('save_card')}
+                    {t("save_card")}
                   </button>
-                  {/* <button
-                    onClick={shareCard}
-                    disabled={!selectedImage || actionLoading}
-                    className={
-                      !selectedImage || actionLoading
-                        ? 'flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-medium text-white bg-gray-300 dark:bg-gray-600 cursor-not-allowed text-xs sm:text-sm'
-                        : 'flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-medium text-white bg-green-700 hover:bg-green-800 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all text-xs sm:text-sm'
-                    }
-                    aria-label={t('share_card')}
-                  >
-                    {actionLoading ? (
-                      <Loader2 className="w-4 sm:w-5 h-4 sm:h-5 animate-spin mr-2" />
-                    ) : (
-                      <Share2 className="w-4 sm:w-5 h-4 sm:h-5 mr-2" />
-                    )}
-                    {t('share_card')}
-                  </button> */}
                 </div>
               </div>
             </div>
@@ -1085,17 +918,13 @@ const CardSection = ({ title, cards, selectedImage, selectCard, type, id }) => (
             relative rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-lg p-3 sm:p-4 bg-white dark:bg-gray-800 w-full
             ${
               selectedImage?.src === card.src
-                ? 'border-2 border-blue-600 ring-2 ring-blue-200/50'
-                : 'border-2 border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700'
+                ? "border-2 border-blue-600 ring-2 ring-blue-200/50"
+                : "border-2 border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
             }
-            ${
-              type === 'whatsapp'
-                ? 'h-64 sm:h-80 aspect-[9/16]'
-                : 'h-48 sm:h-64 aspect-[16/9]'
-            }
+            h-48 sm:h-64 aspect-[16/9]
           `}
           onClick={() => selectCard(card)}
-          onKeyDown={(e) => e.key === 'Enter' && selectCard(card)}
+          onKeyDown={(e) => e.key === "Enter" && selectCard(card)}
           role="button"
           tabIndex={0}
           aria-label={`${title} ${index}`}
@@ -1128,8 +957,8 @@ const RadioButton = ({ label, checked, onChange }) => (
     <div
       className={
         checked
-          ? 'w-5 h-5 rounded-full bg-blue-600 border flex items-center justify-center border-blue-600'
-          : 'w-5 h-5 rounded-full bg-gray-200 dark:bg-gray-700 border flex items-center justify-center border-gray-300 dark:border-gray-600'
+          ? "w-5 h-5 rounded-full bg-blue-600 border flex items-center justify-center border-blue-600"
+          : "w-5 h-5 rounded-full bg-gray-200 dark:bg-gray-700 border flex items-center justify-center border-gray-300 dark:border-gray-600"
       }
     >
       {checked && <Check size={12} className="text-white" />}

@@ -1,87 +1,27 @@
 //RHC images
-import rhcPost1 from '/rhc/rhc-post-1.png'; 
-import rhcPost2 from '/rhc/rhc-post-2.jpg';
-import rhcStory1 from '/rhc/rhc-story-1.jpg';
-import rhcStory2 from '/rhc/rhc-story-2.jpg';
-import rhcStory3 from '/rhc/rhc-story-3.jpg';
+import rhc1 from "/rhc/RHC.jpg";
 
 //FHC images
-import fhcPost1 from '/fhc/fhc-post-1.png';
-import fhcPost2 from '/fhc/fhc-post-2.jpg';
-import fhcStory1 from '/fhc/fhc-story-1.jpg';
-import fhcStory2 from '/fhc/fhc-story-2.jpg';
-import fhcStory3 from '/fhc/fhc-story-3.jpg';
+import fhc1 from "/fhc/FHC.jpg";
 
 //Green images
-import greenPost1 from '/green/reda-green-post-1.png';
-import greenPost2 from '/green/reda-green-post-2.jpg';
-import greenStory1 from '/green/reda-green-story-1.jpg';
-import greenStory2 from '/green/reda-green-story-2.jpg';
-import greenStory3 from '/green/reda-green-story-3.jpg';
+import green1 from "/green/Green.jpg";
 
 //Process images
-import processPost1 from '/process/process-post-1.png';
-import processPost2 from '/process/process-post-2.jpg'; 
-import processStory1 from '/process/process-story-1.jpg';
-import processStory2 from '/process/process-story-2.jpg';
-import processStory3 from '/process/process-story-3.jpg';
+import process1 from "/process/Process.jpg";
 
 //Safe images
-import safePost1 from '/safe/safe-post-1.png';
-import safePost2 from '/safe/safe-post-2.jpg';   
-import safeStory1 from '/safe/safe-story-1.jpg';
-import safeStory2 from '/safe/safe-story-2.jpg';
-import safeStory3 from '/safe/safe-story-3.jpg';
-
+import safe1 from "/safe/Safe.jpg";
 
 //Verdifor images
-import verdiforPost1 from '/verdifor/verdifor-post-1.png';
-import verdiforPost2 from '/verdifor/verdifor-post-2.jpg';
-import verdiforStory1 from '/verdifor/verdifor-story-1.jpg';
-import verdiforStory2 from '/verdifor/verdifor-story-2.jpg';
-
+import verdifor1 from "/verdifor/Verdifor.jpg";
 
 // src/data.js
 export const imageCategories = {
-  RHC: [
-    { src: rhcPost1, type: 'linkedin' },
-    { src: rhcPost2, type: 'linkedin' },
-    { src: rhcStory1, type: 'whatsapp' },
-    { src: rhcStory2, type: 'whatsapp' },
-    { src: rhcStory3, type: 'whatsapp' },
-  ],
-  FHC: [
-    { src: fhcPost1, type: 'linkedin' },
-    { src: fhcPost2, type: 'linkedin' },
-    { src: fhcStory1, type: 'whatsapp' },
-    { src: fhcStory2, type: 'whatsapp' },
-    { src: fhcStory3, type: 'whatsapp' },
-  ],
-  Green: [
-    { src: greenPost1, type: 'linkedin' },
-    { src: greenPost2, type: 'linkedin' },
-    { src: greenStory1, type: 'whatsapp' },
-    { src: greenStory2, type: 'whatsapp' },
-    { src: greenStory3, type: 'whatsapp' },
-  ],
-  Process: [
-    { src: processPost1, type: 'linkedin' },
-    { src: processPost2, type: 'linkedin' },
-    { src: processStory1, type: 'whatsapp' },
-    { src: processStory2, type: 'whatsapp' },
-    { src: processStory3, type: 'whatsapp' },
-  ],
-  Safe: [
-    { src: safePost1, type: 'linkedin' },
-    { src: safePost2, type: 'linkedin' },
-    { src: safeStory1, type: 'whatsapp' },
-    { src: safeStory2, type: 'whatsapp' },
-    { src: safeStory3, type: 'whatsapp' },
-  ],
-  Verdifor: [
-    { src: verdiforPost1, type: 'linkedin' },
-    { src: verdiforPost2, type: 'linkedin' },
-    { src:  verdiforStory1, type: 'whatsapp' },
-    { src: verdiforStory2, type: 'whatsapp' },
-  ],
+  RHC: [{ src: rhc1 }],
+  FHC: [{ src: fhc1 }],
+  Green: [{ src: green1 }],
+  Process: [{ src: process1 }],
+  Safe: [{ src: safe1 }],
+  Verdifor: [{ src: verdifor1 }],
 };
